@@ -1,8 +1,12 @@
 package cn.tpson.kulu.gas.user.biz.service;
 
+import cn.tpson.kulu.gas.api.user.dto.UserConsOrgDetailDTO;
+import cn.tpson.kulu.gas.api.user.query.UserConsOrgDetailQUERY;
+import cn.tpson.kulu.gas.api.user.service.RemoteUserConsOrgDetailService;
 import cn.tpson.kulu.gas.common.jpa.support.ExampleRangeSpecification;
 import cn.tpson.kulu.gas.common.jpa.support.Range;
 import cn.tpson.kulu.gas.common.jpa.support.RangeSpecification;
+import cn.tpson.kulu.gas.common.remote.RemoteResult;
 import cn.tpson.kulu.gas.common.util.DateUtils;
 import cn.tpson.kulu.gas.user.biz.domain.UserConsOrgDetailDO;
 import com.alibaba.fastjson.JSON;
@@ -24,7 +28,7 @@ import java.util.List;
 @RunWith(SpringRunner.class)
 public class UserConsOrgDetailServiceTest {
     @Autowired
-    private UserConsOrgDetailService userConsOrgDetailService;
+    private RemoteUserConsOrgDetailService remoteUserConsOrgDetailService;
 
     @Test
     public void test() {
@@ -36,7 +40,7 @@ public class UserConsOrgDetailServiceTest {
         u.setDeleted(false);
         userConsOrgDetailService.saveAndFlush(u);
         System.out.println("==================================");*/
-        Date now = DateUtils.now();
+        /*Date now = DateUtils.now();
         Range<UserConsOrgDetailDO> r1 = new Range<>("gmtCreate", now, new Date());
         Range<UserConsOrgDetailDO> r2 = new Range<>("gmtModified", now, new Date());
 
@@ -49,5 +53,12 @@ public class UserConsOrgDetailServiceTest {
         Page<UserConsOrgDetailDO> page = userConsOrgDetailService.findAll(spec, p);
         System.out.println(JSON.toJSONString(page));
         System.out.println("==================================");
+*/
+        UserConsOrgDetailQUERY q = new UserConsOrgDetailQUERY();
+        q.setPageNumber(0);
+        q.setPageSize(10);
+        q.setConsOrgName("中建集团");
+        RemoteResult<Page<UserConsOrgDetailDTO>> p = remoteUserConsOrgDetailService.pageByExample(q);
+        System.out.println(JSON.toJSONString(p));
     }
 }

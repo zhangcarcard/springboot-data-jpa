@@ -21,6 +21,7 @@ version = '1.0.0'
  
 dependencies {
     compile project(':kulu-gas-common')
+    compile project(':kulu-gas-api')
     compile "org.springframework.boot:spring-boot-starter-data-jpa:${springBootVersion}"
     compile('org.postgresql:postgresql:42.2.4')
     testCompile "org.springframework.boot:spring-boot-starter-test:${springBootVersion}"
