@@ -1,0 +1,33 @@
+buildscript {
+    repositories {
+		mavenLocal()
+		maven { url "http://192.168.0.5:1234/nexus/content/groups/public/" }
+        maven { url "http://maven.aliyun.com/nexus/content/groups/public/"}
+        mavenCentral()
+		maven { url "http://repo.spring.io/snapshot" }
+        maven { url "http://repo.spring.io/milestone" }
+        maven { url 'http://maven.springframework.org/release' }
+        maven { url 'http://maven.springframework.org/milestone' }
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:$springBootVersion")
+    }
+}
+
+apply plugin: 'org.springframework.boot'
+apply plugin: 'io.spring.dependency-management'
+archivesBaseName = 'kulu-gas-user-deploy'
+version = '1.0.0'
+
+bootJar {
+    mainClassName = 'cn.tpson.kulu.gas.user.deploy.Application'
+}
+ 
+dependencies {
+    compile project(':kulu-gas-common')
+    compile project(':kulu-gas-api')
+    compile project(':kulu-gas-user-biz')
+
+    compile "org.springframework.boot:spring-boot-starter-web:${springBootVersion}"
+    testCompile "org.springframework.boot:spring-boot-starter-test:${springBootVersion}"
+}
