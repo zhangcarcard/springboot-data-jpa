@@ -3,23 +3,14 @@ package cn.tpson.kulu.gas.user.biz.service;
 import cn.tpson.kulu.gas.api.user.dto.UserConsOrgDetailDTO;
 import cn.tpson.kulu.gas.api.user.query.UserConsOrgDetailQUERY;
 import cn.tpson.kulu.gas.api.user.service.RemoteUserConsOrgDetailService;
-import cn.tpson.kulu.gas.common.jpa.support.ExampleRangeSpecification;
-import cn.tpson.kulu.gas.common.jpa.support.Range;
-import cn.tpson.kulu.gas.common.jpa.support.RangeSpecification;
-import cn.tpson.kulu.gas.common.remote.RemoteResult;
-import cn.tpson.kulu.gas.common.util.DateUtils;
+import cn.tpson.kulu.gas.common.service.local.BaseService;
 import cn.tpson.kulu.gas.user.biz.domain.UserConsOrgDetailDO;
-import com.alibaba.fastjson.JSON;
-import org.apache.catalina.User;
+import cn.tpson.kulu.gas.user.biz.service.local.LocalUserConsOrgDetailService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.domain.*;
 import org.springframework.test.context.junit4.SpringRunner;
-
-import java.util.Date;
-import java.util.List;
 
 /**
  * Created by Zhangka in 2018/07/27
@@ -29,6 +20,8 @@ import java.util.List;
 public class UserConsOrgDetailServiceTest {
     @Autowired
     private RemoteUserConsOrgDetailService remoteUserConsOrgDetailService;
+    @Autowired
+    private LocalUserConsOrgDetailService localUserConsOrgDetailService;
 
     @Test
     public void test() {
@@ -58,7 +51,8 @@ public class UserConsOrgDetailServiceTest {
         q.setPageNumber(0);
         q.setPageSize(10);
         q.setConsOrgName("中建集团");
-        RemoteResult<Page<UserConsOrgDetailDTO>> p = remoteUserConsOrgDetailService.pageByExample(q);
-        System.out.println(JSON.toJSONString(p));
+//        RemoteResult<Page<UserConsOrgDetailDTO>> p = remoteUserConsOrgDetailService.pageByExample(q);
+//        System.out.println(JSON.toJSONString(p));
+        System.out.println(remoteUserConsOrgDetailService.pageByExample(q));
     }
 }

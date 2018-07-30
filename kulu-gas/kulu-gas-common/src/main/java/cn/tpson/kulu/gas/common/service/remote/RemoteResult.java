@@ -1,4 +1,4 @@
-package cn.tpson.kulu.gas.common.remote;
+package cn.tpson.kulu.gas.common.service.remote;
 
 import java.io.Serializable;
 

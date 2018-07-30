@@ -1,5 +1,11 @@
 package cn.tpson.kulu.gas.api.user.dto;
 
+import cn.tpson.kulu.gas.common.util.ReferenceUtils;
+import com.alibaba.fastjson.JSON;
+
+import java.lang.reflect.Field;
+import java.util.Date;
+
 /**
  * Created by Zhangka in 2018/07/19
  */
