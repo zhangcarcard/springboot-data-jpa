@@ -9,6 +9,5 @@ spring:
     active: dev
   jpa:
     open-in-view: false
-    database-platform: cn.tpson.kulu.gas.common.db.dialect.JsonbPostgresDialect
-
-
+  application:
+    name: USERSERVICE

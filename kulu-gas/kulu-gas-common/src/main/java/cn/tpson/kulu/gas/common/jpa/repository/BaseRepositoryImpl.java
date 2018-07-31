@@ -10,7 +10,7 @@ import java.io.Serializable;
  * Created by Zhangka in 2018/07/27
  */
 public class BaseRepositoryImpl<T, ID extends Serializable> extends SimpleJpaRepository<T, ID> implements BaseRepository<T, ID> {
-    public BaseRepositoryImpl(JpaEntityInformation entityInformation, EntityManager entityManager) {
+    public BaseRepositoryImpl(JpaEntityInformation<T, ?> entityInformation, EntityManager entityManager) {
         super(entityInformation, entityManager);
     }
 }

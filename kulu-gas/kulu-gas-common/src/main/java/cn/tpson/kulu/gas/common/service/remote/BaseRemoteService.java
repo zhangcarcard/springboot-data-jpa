@@ -1,6 +1,7 @@
 package cn.tpson.kulu.gas.common.service.remote;
 
 import org.springframework.data.domain.Page;
+import org.springframework.web.bind.annotation.GetMapping;
 
 import java.util.List;
 
@@ -14,6 +15,7 @@ public interface BaseRemoteService<DTO> {
      * @param id
      * @return
      */
+    @GetMapping("/findById")
     RemoteResult<DTO> findById(Long id);
 
     /**

@@ -1,11 +1,5 @@
 package cn.tpson.kulu.gas.user.biz.service;
 
-import cn.tpson.kulu.gas.api.user.dto.UserConsOrgDetailDTO;
-import cn.tpson.kulu.gas.api.user.query.UserConsOrgDetailQUERY;
-import cn.tpson.kulu.gas.api.user.service.RemoteUserConsOrgDetailService;
-import cn.tpson.kulu.gas.common.service.local.BaseService;
-import cn.tpson.kulu.gas.user.biz.domain.UserConsOrgDetailDO;
-import cn.tpson.kulu.gas.user.biz.service.local.LocalUserConsOrgDetailService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,10 +12,6 @@ import org.springframework.test.context.junit4.SpringRunner;
 @SpringBootTest
 @RunWith(SpringRunner.class)
 public class UserConsOrgDetailServiceTest {
-    @Autowired
-    private RemoteUserConsOrgDetailService remoteUserConsOrgDetailService;
-    @Autowired
-    private LocalUserConsOrgDetailService localUserConsOrgDetailService;
 
     @Test
     public void test() {
@@ -47,12 +37,5 @@ public class UserConsOrgDetailServiceTest {
         System.out.println(JSON.toJSONString(page));
         System.out.println("==================================");
 */
-        UserConsOrgDetailQUERY q = new UserConsOrgDetailQUERY();
-        q.setPageNumber(0);
-        q.setPageSize(10);
-        q.setConsOrgName("中建集团");
-//        RemoteResult<Page<UserConsOrgDetailDTO>> p = remoteUserConsOrgDetailService.pageByExample(q);
-//        System.out.println(JSON.toJSONString(p));
-        System.out.println(remoteUserConsOrgDetailService.pageByExample(q));
     }
 }

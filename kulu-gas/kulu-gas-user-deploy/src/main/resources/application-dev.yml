@@ -19,3 +19,19 @@ logging:
   level:
     classpath*: debug
 debug: false
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://192.168.1.251:8083/eureka/,http://192.168.1.252:8083/eureka/
+    register-with-eureka: true
+    fetch-registry: true
+    registry-fetch-interval-seconds: 2
+  instance:
+    lease-expiration-duration-in-seconds: 2
+    lease-renewal-interval-in-seconds: 1
+#    instance-id: ${spring.cloud.client.ipAddress}:${server.port}
+    prefer-ip-address: true
+feign:
+  hystrix:
+    enabled: true

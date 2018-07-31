@@ -3,6 +3,7 @@ package cn.tpson.kulu.gas.common.service.local;
 import cn.tpson.kulu.gas.common.jpa.repository.BaseRepository;
 import cn.tpson.kulu.gas.common.util.BeanUtils;
 import cn.tpson.kulu.gas.common.util.ReferenceUtils;
+import com.alibaba.fastjson.JSON;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
@@ -12,19 +13,22 @@ import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Created by Zhangka in 2018/07/30
  */
+@Service
+@Transactional(readOnly = true)
 public class BaseServiceImpl<DTO, DO> implements BaseService<DTO> {
     @Autowired
     private BaseRepository<DO, Long> baseRepository;
 
     @Override
     public DTO findById(Long id) {
-        DO entity = baseRepository.getOne(id);
+        Optional<DO> optional = baseRepository.findById(id);
         Class<DTO> dto = getGenericClassForDTO();
-        return BeanUtils.copyProperties(dto, entity);
+        return optional.isPresent() ? BeanUtils.copyProperties(dto, optional.get()) : null;
     }
 
     @Override

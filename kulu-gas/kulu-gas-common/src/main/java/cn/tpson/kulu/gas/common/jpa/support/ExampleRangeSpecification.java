@@ -23,7 +23,7 @@ public class ExampleRangeSpecification<T> implements Specification<T> {
     }
 
     public static <T> ExampleRangeSpecification<T> of(Example<T> example, Range... ranges) {
-        return new ExampleRangeSpecification(example, Arrays.asList(ranges));
+        return new ExampleRangeSpecification<>(example, Arrays.asList(ranges));
     }
 
     public ExampleRangeSpecification add(Range range) {

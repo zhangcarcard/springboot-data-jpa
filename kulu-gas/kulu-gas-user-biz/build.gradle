@@ -14,15 +14,25 @@ buildscript {
     }
 }
 
-apply plugin: 'org.springframework.boot'
+//apply plugin: 'org.springframework.boot'
 apply plugin: 'io.spring.dependency-management'
 archivesBaseName = 'kulu-gas-user-biz'
 version = '1.0.0'
- 
+
+ext {
+    springCloudVersion = 'Finchley.RELEASE'
+}
+
 dependencies {
     compile project(':kulu-gas-common')
     compile project(':kulu-gas-api')
     compile "org.springframework.boot:spring-boot-starter-data-jpa:${springBootVersion}"
     compile('org.postgresql:postgresql:42.2.4')
     testCompile "org.springframework.boot:spring-boot-starter-test:${springBootVersion}"
+}
+
+dependencyManagement {
+    imports {
+        mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
+    }
 }

@@ -20,7 +20,11 @@ archivesBaseName = 'kulu-gas-user-deploy'
 version = '1.0.0'
 
 bootJar {
-    mainClassName = 'cn.tpson.kulu.gas.user.deploy.Application'
+    mainClassName = 'cn.tpson.kulu.gas.user.Application'
+}
+
+ext {
+    springCloudVersion = 'Finchley.RELEASE'
 }
  
 dependencies {
@@ -28,6 +32,19 @@ dependencies {
     compile project(':kulu-gas-api')
     compile project(':kulu-gas-user-biz')
 
+    compile "org.springframework.boot:spring-boot-starter-data-jpa:${springBootVersion}"
     compile "org.springframework.boot:spring-boot-starter-web:${springBootVersion}"
+    compile "org.springframework.boot:spring-boot-starter-actuator:${springBootVersion}"
     testCompile "org.springframework.boot:spring-boot-starter-test:${springBootVersion}"
+    compile "org.springframework.cloud:spring-cloud-starter-netflix-eureka-client"
+    compile "org.springframework.cloud:spring-cloud-starter-netflix-hystrix"
+    compile "org.springframework.cloud:spring-cloud-starter-openfeign"
+}
+
+
+
+dependencyManagement {
+    imports {
+        mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
+    }
 }

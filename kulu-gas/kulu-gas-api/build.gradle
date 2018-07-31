@@ -14,11 +14,24 @@ buildscript {
     }
 }
 
-apply plugin: 'org.springframework.boot'
+ext {
+    springCloudVersion = 'Finchley.RELEASE'
+}
+
+//apply plugin: 'org.springframework.boot'
 apply plugin: 'io.spring.dependency-management'
 archivesBaseName = 'kulu-gas-api'
 version = '1.0.0'
  
 dependencies {
     compile project(':kulu-gas-common')
+
+    compile 'org.springframework.cloud:spring-cloud-starter-netflix-hystrix'
+    compile 'org.springframework.cloud:spring-cloud-starter-openfeign'
+}
+
+dependencyManagement {
+    imports {
+        mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
+    }
 }
