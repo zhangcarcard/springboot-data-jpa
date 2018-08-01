@@ -24,8 +24,8 @@ bootJar {
 }
  
 dependencies {
-    compile project(':kulu-gas-common')
-    compile project(':kulu-gas-api')
+    compile project(':kulu-common')
+    compile project(':kulu-api')
     compile project(':kulu-gas-eqp-biz')
 
     compile "org.springframework.boot:spring-boot-starter-web:${springBootVersion}"

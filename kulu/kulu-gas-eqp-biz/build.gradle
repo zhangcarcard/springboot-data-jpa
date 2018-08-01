@@ -20,7 +20,7 @@ archivesBaseName = 'kulu-gas-eqp-biz'
 version = '1.0.0'
  
 dependencies {
-    compile project(':kulu-gas-common')
+    compile project(':kulu-common')
     compile "org.springframework.boot:spring-boot-starter-data-jpa:${springBootVersion}"
     compile('org.postgresql:postgresql:42.2.4')
 }

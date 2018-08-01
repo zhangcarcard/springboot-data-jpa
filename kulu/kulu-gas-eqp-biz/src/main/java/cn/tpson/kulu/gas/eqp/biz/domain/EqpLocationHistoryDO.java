@@ -1,7 +1,7 @@
 package cn.tpson.kulu.gas.eqp.biz.domain;
 
-import cn.tpson.kulu.gas.common.db.dialect.JsonbType;
-import cn.tpson.kulu.gas.common.db.domain.BaseDO;
+import cn.tpson.kulu.common.db.dialect.JsonbType;
+import cn.tpson.kulu.common.db.domain.BaseDO;
 import com.alibaba.fastjson.JSON;
 import org.hibernate.annotations.Type;
 import org.hibernate.annotations.TypeDef;

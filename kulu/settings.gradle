@@ -8,10 +8,13 @@
  */
 
 rootProject.name = 'kulu-gas'
-include 'kulu-gas-common'
-include 'kulu-gas-api'
+include 'kulu-common'
+include 'kulu-api'
 include 'kulu-gas-eqp-biz'
 include 'kulu-gas-eqp-deploy'
 
 include 'kulu-gas-user-biz'
 include 'kulu-gas-user-deploy'
+
+include 'kulu-dispatcher-biz'
+include 'kulu-dispatcher-deploy'

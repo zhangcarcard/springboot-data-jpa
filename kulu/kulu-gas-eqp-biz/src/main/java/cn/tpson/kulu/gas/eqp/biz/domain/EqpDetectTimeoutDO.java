@@ -1,6 +1,7 @@
 package cn.tpson.kulu.gas.eqp.biz.domain;
 
-import cn.tpson.kulu.gas.common.db.domain.BaseDO;
+import cn.tpson.kulu.common.constant.CommonEnum;
+import cn.tpson.kulu.common.db.domain.BaseDO;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -78,7 +79,7 @@ public class EqpDetectTimeoutDO extends BaseDO {
 
     /**
      * 状态.
-     * @see cn.tpson.kulu.gas.common.constant.CommonEnum
+     * @see CommonEnum
      */
     private Byte status;
 

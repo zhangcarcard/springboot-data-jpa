@@ -1,0 +1,37 @@
+buildscript {
+    repositories {
+		mavenLocal()
+		maven { url "http://192.168.0.5:1234/nexus/content/groups/public/" }
+        maven { url "http://maven.aliyun.com/nexus/content/groups/public/"}
+        mavenCentral()
+		maven { url "http://repo.spring.io/snapshot" }
+        maven { url "http://repo.spring.io/milestone" }
+        maven { url 'http://maven.springframework.org/release' }
+        maven { url 'http://maven.springframework.org/milestone' }
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:$springBootVersion")
+    }
+}
+
+ext {
+    springCloudVersion = 'Finchley.RELEASE'
+}
+
+//apply plugin: 'org.springframework.boot'
+apply plugin: 'io.spring.dependency-management'
+archivesBaseName = 'kulu-api'
+version = '1.0.0'
+ 
+dependencies {
+    compile project(':kulu-common')
+
+    compile 'org.springframework.cloud:spring-cloud-starter-netflix-hystrix'
+    compile 'org.springframework.cloud:spring-cloud-starter-openfeign'
+}
+
+dependencyManagement {
+    imports {
+        mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
+    }
+}

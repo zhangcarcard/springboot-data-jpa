@@ -1,6 +1,6 @@
 package cn.tpson.kulu.gas.eqp.biz.domain;
 
-import cn.tpson.kulu.gas.common.db.domain.BaseDO;
+import cn.tpson.kulu.common.db.domain.BaseDO;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;

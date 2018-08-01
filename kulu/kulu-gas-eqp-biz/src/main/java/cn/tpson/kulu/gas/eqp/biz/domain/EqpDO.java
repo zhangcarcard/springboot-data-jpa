@@ -1,6 +1,8 @@
 package cn.tpson.kulu.gas.eqp.biz.domain;
 
-import cn.tpson.kulu.gas.common.db.domain.BaseDO;
+import cn.tpson.kulu.common.constant.EqpStatusEnum;
+import cn.tpson.kulu.common.constant.EqpTypeEnum;
+import cn.tpson.kulu.common.db.domain.BaseDO;
 
 import javax.persistence.*;
 
@@ -26,7 +28,7 @@ public class EqpDO extends BaseDO {
     /**
      * 设备类型
      *
-     * @see cn.tpson.kulu.gas.common.constant.EqpTypeEnum
+     * @see EqpTypeEnum
      */
     private Byte type;
 
@@ -61,7 +63,7 @@ public class EqpDO extends BaseDO {
     /**
      * 状态
      *
-     * @see cn.tpson.kulu.gas.common.constant.EqpStatusEnum
+     * @see EqpStatusEnum
      */
     private Byte status;
 

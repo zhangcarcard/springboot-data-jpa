@@ -1,6 +1,8 @@
 package cn.tpson.kulu.gas.eqp.biz.domain;
 
-import cn.tpson.kulu.gas.common.db.domain.BaseDO;
+import cn.tpson.kulu.common.constant.EqpDetectStatusEnum;
+import cn.tpson.kulu.common.constant.EqpDetectTypeEnum;
+import cn.tpson.kulu.common.db.domain.BaseDO;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -24,13 +26,13 @@ public class EqpDetectHistoryDO extends BaseDO {
 
     /**
      * 提交状态.
-     * @see cn.tpson.kulu.gas.common.constant.EqpDetectStatusEnum
+     * @see EqpDetectStatusEnum
      */
     private Byte status;
 
     /**
      * 检测类型.
-     * @see cn.tpson.kulu.gas.common.constant.EqpDetectTypeEnum
+     * @see EqpDetectTypeEnum
      */
     private Byte type;
 
