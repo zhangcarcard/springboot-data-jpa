@@ -21,6 +21,6 @@ public class UserServiceImpl extends BaseServiceImpl<UserDTO, UserDO> implements
 
     @Override
     public UserDTO findByUsername(String username) {
-        return BeanUtils.copyProperties(UserDTO.class, userRepository.findByUsername(username));
+        return BeanUtils.newAndCopyProperties(UserDTO.class, userRepository.findByUsername(username));
     }
 }

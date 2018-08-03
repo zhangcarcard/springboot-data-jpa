@@ -1,6 +1,8 @@
 package cn.tpson.kulu.dispatcher.biz.domain;
 
 import cn.tpson.kulu.common.db.domain.BaseDO;
+import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
@@ -10,12 +12,14 @@ import javax.persistence.*;
  * Created by Zhangka in 2018/08/01
  */
 @Entity(name = "Protocal")
-@Table(name = "t_protocal")
+@Table(name = "t_protocal", uniqueConstraints = @UniqueConstraint(name = "uk_t_protocal_name", columnNames = "name"))
 @SequenceGenerator(name = "generator", sequenceName = "t_protocal_seq", allocationSize = 1)
-@SQLDelete(sql = "DELETE FROM t_protocal SET is_deleted = true WHERE id = :id AND version = :version")
+@SQLDelete(sql = "UPDATE t_protocal SET is_deleted = true, gmt_modified = now() WHERE id = ? AND version = ?")
 @Where(clause = "is_deleted = false")
+@DynamicUpdate
+@DynamicInsert
 public class ProtocalDO extends BaseDO {
-    @Column(length = 50)
+    @Column(length = 50, nullable = false)
     private String name;
 
     @Column(length = 10)
@@ -29,13 +33,24 @@ public class ProtocalDO extends BaseDO {
 
     @Column(name = "offset_num")
     private Integer offset;
-    private Integer length;
+
+    private Integer offsetType;
+    private Integer count;
 
     @ManyToOne
     @JoinColumn(name = "eqp_id", foreignKey = @ForeignKey(name = "fk_t_equipment_id"))
     private EquipmentDO equipment;
 
+    /** 所属设备 */
+    private String eqpName;
 
+    public String getEqpName() {
+        return eqpName;
+    }
+
+    public void setEqpName(String eqpName) {
+        this.eqpName = eqpName;
+    }
 
     public String getName() {
         return name;
@@ -77,12 +92,20 @@ public class ProtocalDO extends BaseDO {
         this.offset = offset;
     }
 
-    public Integer getLength() {
-        return length;
+    public Integer getOffsetType() {
+        return offsetType;
     }
 
-    public void setLength(Integer length) {
-        this.length = length;
+    public void setOffsetType(Integer offsetType) {
+        this.offsetType = offsetType;
+    }
+
+    public Integer getCount() {
+        return count;
+    }
+
+    public void setCount(Integer count) {
+        this.count = count;
     }
 
     public EquipmentDO getEquipment() {
@@ -101,7 +124,8 @@ public class ProtocalDO extends BaseDO {
                 ", endFlag='" + endFlag + '\'' +
                 ", split='" + split + '\'' +
                 ", offset=" + offset +
-                ", length=" + length +
+                ", offsetType=" + offsetType +
+                ", count=" + count +
                 ", equipment=" + equipment +
                 "} " + super.toString();
     }

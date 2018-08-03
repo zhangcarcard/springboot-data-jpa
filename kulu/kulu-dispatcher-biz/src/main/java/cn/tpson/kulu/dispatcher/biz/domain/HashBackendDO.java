@@ -1,5 +1,7 @@
 package cn.tpson.kulu.dispatcher.biz.domain;
 
+import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
@@ -11,20 +13,22 @@ import javax.persistence.Table;
  * Created by Zhangka in 2018/08/01
  */
 @Entity(name = "HashBackend")
-@Table(name = "t_hash_backend")
-@SequenceGenerator(name = "generator", sequenceName = "t_hash_backend_seq", allocationSize = 1)
-@SQLDelete(sql = "DELETE FROM t_hash_backend SET is_deleted = true WHERE id = :id AND version = :version")
+@Table(name = "t_backend_hash")
+@SequenceGenerator(name = "generator", sequenceName = "t_backend_hash_seq", allocationSize = 1)
+@SQLDelete(sql = "UPDATE t_backend_hash SET is_deleted = true, gmt_modified = now() WHERE id = ? AND version = ?")
 @Where(clause = "is_deleted = false")
+@DynamicUpdate
+@DynamicInsert
 public class HashBackendDO extends BackendDO {
     private String key;
 
     public HashBackendDO() {}
-    public HashBackendDO(String ip, Integer port, String ownerName, String groupName) {
-        super(ip, port, ownerName, groupName);
+    public HashBackendDO(String ip, Integer port) {
+        super(ip, port);
     }
 
     public HashBackendDO(BackendDO b) {
-        this(b.getIp(), b.getPort(), b.getEqpName(), b.getGroupName());
+        this(b.getIp(), b.getPort());
     }
 
     public String getKey() {

@@ -1,5 +1,11 @@
 package cn.tpson.kulu.common.db.domain;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
+import org.springframework.format.annotation.DateTimeFormat;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
@@ -8,19 +14,38 @@ import java.util.Date;
  * Created by Zhangka in 2018/07/18
  */
 @MappedSuperclass
+@DynamicUpdate
+@DynamicInsert
 public class BaseDO implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "generator")
     private Long id;
 
+    @JsonIgnore
     @Column(name = "is_deleted")
     private Boolean deleted;
 
     @Version
     private Long version;
 
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Date gmtCreate;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Date gmtModified;
+
+    @JsonIgnore
+    @Transient
+    private Integer pageNumber;
+
+    @JsonIgnore
+    @Transient
+    private Integer pageSize;
+
+    public BaseDO() {}
+    public BaseDO(Integer pageNumber, Integer pageSize) {
+        this.pageNumber = pageNumber;
+        this.pageSize = pageSize;
+    }
 
     ////////////////////////////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////////////////////////////
@@ -62,5 +87,21 @@ public class BaseDO implements Serializable {
 
     public void setGmtModified(Date gmtModified) {
         this.gmtModified = gmtModified;
+    }
+
+    public Integer getPageNumber() {
+        return pageNumber;
+    }
+
+    public void setPageNumber(Integer pageNumber) {
+        this.pageNumber = pageNumber;
+    }
+
+    public Integer getPageSize() {
+        return pageSize;
+    }
+
+    public void setPageSize(Integer pageSize) {
+        this.pageSize = pageSize;
     }
 }

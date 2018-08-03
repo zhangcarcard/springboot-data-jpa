@@ -7,4 +7,5 @@ import cn.tpson.kulu.dispatcher.biz.dto.EquipmentDTO;
  * Created by Zhangka in 2018/08/01
  */
 public interface EquipmentService extends BaseService<EquipmentDTO> {
+    EquipmentDTO findByName(String name);
 }

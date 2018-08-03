@@ -3,7 +3,6 @@ package cn.tpson.kulu.common.util;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -19,36 +18,38 @@ public class BeanUtils {
 	private BeanUtils() {
 		throw new AssertionError("No BeanUtils instances for you!");
 	}
-	
-	public static <T> T copyProperties(final Class<T> dest, final Object orig) {
-		if (orig == null) {
+
+	public static void copyProperties(Object dest, Object source, String... properties) {
+	    org.springframework.beans.BeanUtils.copyProperties(source, dest, properties);
+    }
+
+	public static <T> T newAndCopyProperties(final Class<T> dest, final Object source) {
+		if (source == null) {
 			return null;
 		}
 		
-		T t;
 		try {
-			t = dest.newInstance();
-			org.apache.commons.beanutils.BeanUtils.copyProperties(t, orig);
-		} catch (IllegalAccessException | InvocationTargetException | InstantiationException e) {
+			T t = dest.newInstance();
+			copyProperties(t, source);
+			return t;
+		} catch (IllegalAccessException | InstantiationException e) {
 			log.error("拷贝对象出错！", e);
 			return null;
 		}
-		
-		return t;
 	}
 	
-	public static <T> List<T> copyPropertiesForList(final Class<T> dest, final List<?> origs) {
-		if (origs == null) {
+	public static <T> List<T> newAndCopyPropertiesForList(final Class<T> dest, final Iterable<?> sources) {
+		if (sources == null) {
 			return Collections.emptyList();
 		}
 		
 		List<T> list = new ArrayList<>();
-		for (Object orig : origs) {
+		for (Object source : sources) {
 			T t;
 			try {
 				t = dest.newInstance();
-				org.apache.commons.beanutils.BeanUtils.copyProperties(t, orig);
-			} catch (InstantiationException | IllegalAccessException | InvocationTargetException e) {
+				copyProperties(t, source);
+			} catch (InstantiationException | IllegalAccessException e) {
 				log.error("拷贝列表对象出错！", e);
 				return Collections.emptyList();
 			}

@@ -8,4 +8,5 @@ import cn.tpson.kulu.dispatcher.biz.dto.ProtocalDTO;
  * Created by Zhangka in 2018/08/01
  */
 public interface ProtocalService extends BaseService<ProtocalDTO> {
+    ProtocalDTO findByName(String name);
 }

@@ -1,7 +1,6 @@
 package cn.tpson.kulu.common.dto.vo;
 
 import cn.tpson.kulu.common.constant.ErrorCodeEnum;
-import cn.tpson.kulu.gas.constant.ErrorCodeEnum;
 import com.alibaba.fastjson.JSONObject;
 import com.fasterxml.jackson.annotation.JsonInclude;
 

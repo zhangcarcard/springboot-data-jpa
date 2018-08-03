@@ -16,6 +16,10 @@ public class DateUtils {
         throw new AssertionError("No DateUtils instances for you!");
     }
 
+    public static Date now() {
+        return new Date();
+    }
+
     public static int getSeason(Date date) {
         int season = 0;
 

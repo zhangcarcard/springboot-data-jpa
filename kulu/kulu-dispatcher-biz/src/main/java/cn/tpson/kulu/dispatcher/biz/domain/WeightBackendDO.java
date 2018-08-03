@@ -1,5 +1,7 @@
 package cn.tpson.kulu.dispatcher.biz.domain;
 
+import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
@@ -11,21 +13,23 @@ import javax.persistence.Table;
  * Created by Zhangka in 2018/08/01
  */
 @Entity(name = "WeightBackend")
-@Table(name = "t_weight_backend")
-@SequenceGenerator(name = "generator", sequenceName = "t_weight_backend_seq", allocationSize = 1)
-@SQLDelete(sql = "DELETE FROM t_weight_backend SET is_deleted = true WHERE id = :id AND version = :version")
+@Table(name = "t_backend_weight")
+@SequenceGenerator(name = "generator", sequenceName = "t_backend_weight_seq", allocationSize = 1)
+@SQLDelete(sql = "UPDATE t_backend_weight SET is_deleted = true, gmt_modified = now() WHERE id = ? AND version = ?")
 @Where(clause = "is_deleted = false")
+@DynamicUpdate
+@DynamicInsert
 public class WeightBackendDO extends BackendDO {
     private Integer weight;
 
     public WeightBackendDO() {}
-    public WeightBackendDO(String ip, Integer port, String ownerName, String groupName, Integer weight) {
-        super(ip, port, ownerName, groupName);
+    public WeightBackendDO(String ip, Integer port, Integer weight) {
+        super(ip, port);
         this.weight = weight;
     }
 
     public WeightBackendDO(BackendDO b, Integer weight) {
-        this(b.getIp(), b.getPort(), b.getEqpName(), b.getGroupName(), weight);
+        this(b.getIp(), b.getPort(), weight);
     }
 
     public int getWeight() {

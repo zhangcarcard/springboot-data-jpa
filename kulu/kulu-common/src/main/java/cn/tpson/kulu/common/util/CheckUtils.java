@@ -12,8 +12,9 @@ import java.util.Objects;
 
 /**
  * 抛出的异常被GlobalExceptionHandler统一捕获.
- *
+ * @see org.springframework.util.Assert
  */
+@Deprecated
 public class CheckUtils {
 	private CheckUtils() {
 		throw new AssertionError("No CheckUtils instances for you!");

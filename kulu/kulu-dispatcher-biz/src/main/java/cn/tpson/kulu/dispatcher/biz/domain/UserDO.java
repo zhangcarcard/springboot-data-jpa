@@ -1,6 +1,8 @@
 package cn.tpson.kulu.dispatcher.biz.domain;
 
 import cn.tpson.kulu.common.db.domain.BaseDO;
+import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
@@ -15,8 +17,10 @@ import javax.persistence.Table;
 @Entity(name = "User")
 @Table(name = "t_user")
 @SequenceGenerator(name = "generator", sequenceName = "t_user_seq", allocationSize = 1)
-@SQLDelete(sql = "DELETE FROM t_user SET is_deleted = true WHERE id = :id AND version = :version")
+@SQLDelete(sql = "UPDATE t_user SET is_deleted = true, gmt_modified = now() WHERE id = ? AND version = ?")
 @Where(clause = "is_deleted = false")
+@DynamicUpdate
+@DynamicInsert
 public class UserDO extends BaseDO {
     @Column(length = 20, nullable = false)
     private String username;

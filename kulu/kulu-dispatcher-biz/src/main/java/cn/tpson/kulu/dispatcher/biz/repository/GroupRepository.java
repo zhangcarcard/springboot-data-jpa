@@ -8,4 +8,5 @@ import cn.tpson.kulu.dispatcher.biz.domain.GroupDO;
  * Created by Zhangka in 2018/08/01
  */
 public interface GroupRepository extends BaseRepository<GroupDO, Long> {
+    GroupDO findByName(String name);
 }

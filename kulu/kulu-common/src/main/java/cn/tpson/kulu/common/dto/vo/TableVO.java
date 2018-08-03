@@ -1,23 +1,23 @@
 package cn.tpson.kulu.common.dto.vo;
 
 public class TableVO {
-	private Integer total;
+	private Long total;
 	private Object rows;
 	
-	public TableVO(Integer total, Object rows) {
+	public TableVO(Long total, Object rows) {
 		this.total = total;
 		this.rows = rows;
 	}
 	
-	public static TableVO successResult(Integer total, Object rows) {
+	public static TableVO successResult(Long total, Object rows) {
 		return new TableVO(total, rows);
 	}
 
-	public Integer getTotal() {
+	public Long getTotal() {
 		return total;
 	}
 
-	public void setTotal(Integer total) {
+	public void setTotal(Long total) {
 		this.total = total;
 	}
 
@@ -28,13 +28,4 @@ public class TableVO {
 	public void setRows(Object rows) {
 		this.rows = rows;
 	}
-	
-	/*@Override
-	public String toString() {
-		JSONObject json = new JSONObject();
-		json.put("total", total);
-		json.put("rows", rows);
-		
-		return json.toJSONString();
-	}*/
 }

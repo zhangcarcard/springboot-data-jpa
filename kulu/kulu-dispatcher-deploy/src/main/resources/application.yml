@@ -4,8 +4,6 @@ logging:
     max-size: 50MB
 server:
   port: 8081
-  servlet:
-    context-path: /agent
 spring:
   profiles:
     active: dev
@@ -13,3 +11,4 @@ spring:
     open-in-view: false
 #  application:
 #    name: USERSERVICE
+

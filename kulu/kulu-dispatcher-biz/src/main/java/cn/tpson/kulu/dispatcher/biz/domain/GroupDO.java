@@ -1,22 +1,23 @@
 package cn.tpson.kulu.dispatcher.biz.domain;
 
 import cn.tpson.kulu.common.db.domain.BaseDO;
+import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.SequenceGenerator;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 /**
  * Created by Zhangka in 2018/08/01
  */
 @Entity(name = "Group")
-@Table(name = "t_group")
+@Table(name = "t_group", uniqueConstraints = @UniqueConstraint(name = "uk_t_group_name", columnNames = "name"))
 @SequenceGenerator(name = "generator", sequenceName = "t_group_seq", allocationSize = 1)
-@SQLDelete(sql = "DELETE FROM t_group SET is_deleted = true WHERE id = :id AND version = :version")
+@SQLDelete(sql = "UPDATE t_group SET is_deleted = true, gmt_modified = now() WHERE id = ? AND version = ?")
 @Where(clause = "is_deleted = false")
+@DynamicInsert
+@DynamicUpdate
 public class GroupDO extends BaseDO {
     @Column(length = 50, nullable = false)
     private String name;

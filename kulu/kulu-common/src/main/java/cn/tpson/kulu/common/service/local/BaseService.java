@@ -1,5 +1,6 @@
 package cn.tpson.kulu.common.service.local;
 
+import cn.tpson.kulu.common.jpa.support.Like;
 import cn.tpson.kulu.common.jpa.support.Range;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort;
@@ -66,6 +67,15 @@ public interface BaseService<DTO> {
     <QUERY extends DTO> long countByExample(QUERY query, Range... ranges);
 
     /**
+     *
+     * @param query
+     * @param like
+     * @param <QUERY>
+     * @return
+     */
+    <QUERY extends DTO> long countByExample(QUERY query, Like like, Range... ranges);
+
+    /**
      * 分页查询实体列表，如果查询不到，返回元素数量为0的列表.
      *
      * @param query
@@ -84,6 +94,17 @@ public interface BaseService<DTO> {
     <QUERY extends DTO> Page<DTO> pageByExample(QUERY query, Sort sort, Range... ranges);
 
     /**
+     *
+     * @param query
+     * @param like
+     * @param sort
+     * @param ranges
+     * @param <QUERY>
+     * @return
+     */
+    <QUERY extends DTO> Page<DTO> pageByExample(QUERY query, Like like, Sort sort, Range... ranges);
+
+    /**
      * 保存实体.
      *
      * @param dto
@@ -93,11 +114,25 @@ public interface BaseService<DTO> {
 
     /**
      * 保存实体.
+     * @param entities
+     * @return
+     */
+    long saveAll(Iterable<DTO> entities);
+
+    /**
+     * 保存实体.
      *
      * @param dto
      * @return
      */
     long update(DTO dto);
+
+    /**
+     * 保存实体.
+     * @param entities
+     * @return
+     */
+    long updateAll(Iterable<DTO> entities);
 
     /**
      * 通过id删除实体,返回被删除的记录数.
@@ -113,4 +148,10 @@ public interface BaseService<DTO> {
      * @return
      */
     void deleteAll(Iterable<Long> ids);
+
+    /**
+     *
+     * @param entities
+     */
+    void deleteAllEntity(Iterable<DTO> entities);
 }

@@ -6,7 +6,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 /**
  * Created by Zhangka in 2018/08/01
  */
-@SpringBootApplication(scanBasePackages = "cn.tpson.kulu.dispatcher")
+@SpringBootApplication(scanBasePackages = {"cn.tpson.kulu.dispatcher", "cn.tpson.kulu.common"})
 public class Application {
     public static void main(String[] args) {
         /*new SpringApplicationBuilder()

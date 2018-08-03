@@ -7,4 +7,5 @@ import cn.tpson.kulu.dispatcher.biz.domain.ProtocalDO;
  * Created by Zhangka in 2018/08/01
  */
 public interface ProtocalRepository extends BaseRepository<ProtocalDO, Long> {
+    ProtocalDO findByName(String name);
 }
