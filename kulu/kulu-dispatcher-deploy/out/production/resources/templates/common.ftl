@@ -28,7 +28,7 @@
                 </li>
                 <li <#if menu == "protocal" && submenu == "protocal">class="active"</#if>><a href="/protocal/protocal.html">协议</a></li>
                 <li <#if menu == "group" && submenu == "group">class="active"</#if>><a href="/group/group.html">分组</a></li>
-                <li <#if menu == "equipment" && submenu == "equipment">class="active"</#if>><a href="/equipment/equipment.html">设备</a></li>
+                <!--<li <#if menu == "equipment" && submenu == "equipment">class="active"</#if>><a href="/equipment/equipment.html">设备</a></li>-->
             </ul>
             <ul class="nav navbar-nav navbar-right">
                 <li><a href="/logout.do">退出</a></li>
