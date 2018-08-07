@@ -1,7 +1,7 @@
 package cn.tpson.kulu.gas.user.biz.service.local.impl;
 
 import cn.tpson.kulu.api.user.dto.UserConsOrgDetailDTO;
-import cn.tpson.kulu.common.service.local.BaseServiceImpl;
+import cn.tpson.kulu.common.jpa.service.local.BaseServiceImpl;
 import cn.tpson.kulu.gas.user.biz.domain.UserConsOrgDetailDO;
 import cn.tpson.kulu.gas.user.biz.service.local.LocalUserConsOrgDetailService;
 import org.springframework.stereotype.Service;

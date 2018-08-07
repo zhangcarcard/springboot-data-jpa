@@ -1,6 +1,6 @@
 package cn.tpson.kulu.dispatcher.biz.domain;
 
-import cn.tpson.kulu.common.db.domain.BaseDO;
+import cn.tpson.kulu.common.jpa.db.domain.BaseDO;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.SQLDelete;
@@ -12,7 +12,7 @@ import javax.persistence.*;
  * Created by Zhangka in 2018/08/01
  */
 @Entity(name = "Group")
-@Table(name = "t_group", uniqueConstraints = @UniqueConstraint(name = "uk_t_group_name", columnNames = "name"))
+@Table(name = "t_group")
 @SequenceGenerator(name = "generator", sequenceName = "t_group_seq", allocationSize = 1)
 @SQLDelete(sql = "UPDATE t_group SET is_deleted = true, gmt_modified = now() WHERE id = ? AND version = ?")
 @Where(clause = "is_deleted = false")

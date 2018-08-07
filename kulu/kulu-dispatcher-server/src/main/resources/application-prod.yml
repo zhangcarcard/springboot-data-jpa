@@ -1,0 +1,33 @@
+debug: false
+
+kuluagent:
+  car:
+    boss: 1
+    worker: 0
+    backlog: 1024
+    port: 7081
+    timeout: 3000
+  watch:
+    boss: 1
+    worker: 0
+    backlog: 1024
+    port: 7083
+    timeout: 3000
+
+agent:
+  url: http://182.61.20.179:8081/protocal
+
+#redis
+spring:
+  redis:
+    database: 0
+    host: 182.61.20.179
+    port: 6379
+    password: kulu###2018
+    timeout: 60000ms
+    jedis:
+      pool:
+        max-active: 100
+        max-wait: -1ms
+        max-idle: 8
+        min-idle: 8

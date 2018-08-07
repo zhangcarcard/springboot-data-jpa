@@ -40,31 +40,33 @@ public class EquipmentController {
     @ResponseBody
     @RequestMapping(value = "/equipment.do", method = RequestMethod.GET)
     public TableVO list(Integer offset, Integer limit, String search, String order, String sortName) {
-        EquipmentQUERY query = new EquipmentQUERY(offset / limit, limit);
-        Like like = null;
         Sort sort = null;
-        if (StringUtils.isNotBlank(search)) {
-            like = Like.by(
-                    Like.Pair.by("name", "%" + search + "%"),
-                    Like.Pair.by("comment", "%" + search + "%")
-            );
-        }
         if (StringUtils.isNotBlank(order) && StringUtils.isNotBlank(sortName)) {
             sort = Sort.by(Sort.Direction.fromString(order.toUpperCase()), sortName);
         }
-        Page<EquipmentDTO> page = equipmentService.pageByExample(query, like, sort);
+        Page<EquipmentDTO> page = equipmentService.pageByKeywordContaining(offset / limit, limit, sort, search);
+
         return TableVO.successResult(page.getTotalElements(), page.getContent());
     }
 
     @ResponseBody
     @RequestMapping(value = "/equipment.do", method = RequestMethod.POST)
     public ResultVO save(EquipmentDTO equipment) {
-        if (equipment.getId() == null && StringUtils.isNotBlank(equipment.getName())) {
-            EquipmentDTO dto = equipmentService.findByName(equipment.getName());
-            if (dto != null) {
-                return ResultVO.failResult("名称不能重复.");
+        if (equipment.getId() == null) {
+            if (StringUtils.isNotBlank(equipment.getName())) {
+                EquipmentDTO dto = equipmentService.findByName(equipment.getName());
+                if (dto != null) {
+                    return ResultVO.failResult("名称不能重复.");
+                }
+            }
+            if (equipment.getPort() != null) {
+                EquipmentDTO dto = equipmentService.findByPort(equipment.getPort());
+                if (dto != null) {
+                    return ResultVO.failResult("端口不能重复.");
+                }
             }
         }
+
         return equipmentService.save(equipment) > 0
                 ? ResultVO.successResult()
                 : ResultVO.failResult("保存失败.");

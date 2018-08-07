@@ -9,6 +9,7 @@
 
 rootProject.name = 'kulu-gas'
 include 'kulu-common'
+include 'kulu-jpa-common'
 include 'kulu-api'
 include 'kulu-gas-eqp-biz'
 include 'kulu-gas-eqp-deploy'
@@ -18,3 +19,4 @@ include 'kulu-gas-user-deploy'
 
 include 'kulu-dispatcher-biz'
 include 'kulu-dispatcher-deploy'
+include 'kulu-dispatcher-server'

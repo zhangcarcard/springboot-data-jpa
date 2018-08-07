@@ -24,8 +24,7 @@ bootJar {
 }
  
 dependencies {
-    compile project(':kulu-common')
-    compile project(':kulu-api')
+    compile project(':kulu-jpa-common')
     compile project(':kulu-dispatcher-biz')
 
     compile "org.springframework.boot:spring-boot-starter-web:${springBootVersion}"

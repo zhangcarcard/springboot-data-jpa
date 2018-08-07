@@ -1,7 +1,7 @@
 package cn.tpson.kulu.gas.user.biz.service.local;
 
 import cn.tpson.kulu.api.user.dto.UserConsOrgDetailDTO;
-import cn.tpson.kulu.common.service.local.BaseService;
+import cn.tpson.kulu.common.jpa.service.local.BaseService;
 
 /**
  * Created by Zhangka in 2018/07/30

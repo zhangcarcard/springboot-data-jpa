@@ -2,11 +2,10 @@ package cn.tpson.kulu.dispatcher.controller;
 
 import cn.tpson.kulu.common.dto.vo.ResultVO;
 import cn.tpson.kulu.common.util.ExcelUtils;
-import cn.tpson.kulu.dispatcher.biz.dto.HashBackendDTO;
-import cn.tpson.kulu.dispatcher.biz.dto.ProtocalDTO;
-import cn.tpson.kulu.dispatcher.biz.dto.RandomBackendDTO;
-import cn.tpson.kulu.dispatcher.biz.dto.WeightBackendDTO;
+import cn.tpson.kulu.dispatcher.biz.dto.*;
+import cn.tpson.kulu.dispatcher.biz.dto.query.ProtocalQUERY;
 import cn.tpson.kulu.dispatcher.biz.service.*;
+import cn.tpson.kulu.dispatcher.util.ProtocalUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -108,17 +107,22 @@ public class FileController {
                 rows.forEach(e -> {
                     // watch,@G#@,@R#@,*,,5
                     String[] array = e;
-                    if (array.length == 6) {
-                        ProtocalDTO protocal = new ProtocalDTO();
-                        protocal.setName(array[0]);
-                        protocal.setStartFlag(array[1]);
-                        protocal.setEndFlag(array[2]);
-                        protocal.setSplit("*".equals(array[3]) ? "," : array[3]);
-                        protocal.setOffset(NumberUtils.isDigits(array[4]) ? Integer.valueOf(array[4]) : 0);
-                        protocal.setCount(NumberUtils.isDigits(array[5]) ? Integer.valueOf(array[5]) : 0);
-                        protocal.setEqpName(array[6]);
-                        protocal.setEquipment(equipmentService.findByName(array[6]));
-                        protocals.add(protocal);
+                    if (array.length == 7) {
+                        EquipmentDTO equipment = equipmentService.findByName(array[6]);
+
+                        if (equipment != null) {
+                            ProtocalDTO protocal = new ProtocalDTO();
+                            protocal.setName(array[0]);
+                            protocal.setStartFlag(array[1]);
+                            protocal.setEndFlag(array[2]);
+                            protocal.setSplit("*".equals(array[3]) ? "," : array[3]);
+                            protocal.setOffset(NumberUtils.isDigits(array[4]) ? Integer.valueOf(array[4]) : null);
+                            protocal.setOffsetType(protocal.getOffset() != null ? ProtocalUtils.OFFSET_TYPE_OFFSET : ProtocalUtils.OFFSET_TYPE_SPLIT);
+                            protocal.setCount(NumberUtils.isDigits(array[5]) ? Integer.valueOf(array[5]) : 0);
+                            protocal.setEqpName(array[6]);
+                            protocal.setEquipment(equipment);
+                            protocals.add(protocal);
+                        }
                     }
                 });
                 if (protocals.size() > 0) {
@@ -131,14 +135,19 @@ public class FileController {
                     // 192.168.1.249,8809,watch,watch_group1
                     String[] array = e;
                     if (array.length == 4) {
-                        RandomBackendDTO b = new RandomBackendDTO();
-                        b.setIp(array[0]);
-                        b.setPort(NumberUtils.isDigits(array[1]) ? Integer.valueOf(array[1]) : 0);
-                        b.setProtocal(protocalService.findByName(array[2]));
-                        b.setGroup(groupService.findByName(array[3]));
-                        b.setProtocalName(array[2]);
-                        b.setGroupName(array[3]);
-                        randoms.add(b);
+                        ProtocalDTO protocal = protocalService.findByName(array[2]);
+                        GroupDTO group = groupService.findByName(array[3]);
+
+                        if (protocal != null && group != null) {
+                            RandomBackendDTO b = new RandomBackendDTO();
+                            b.setIp(array[0]);
+                            b.setPort(NumberUtils.isDigits(array[1]) ? Integer.valueOf(array[1]) : 0);
+                            b.setProtocalName(array[2]);
+                            b.setGroupName(array[3]);
+                            b.setProtocal(protocal);
+                            b.setGroup(group);
+                            randoms.add(b);
+                        }
                     }
                 });
                 if (randoms.size() > 0) {
@@ -151,15 +160,20 @@ public class FileController {
                     // 192.168.1.249,8809,2,watch,watch_group1
                     String[] array = e;
                     if (array.length == 5) {
-                        WeightBackendDTO b = new WeightBackendDTO();
-                        b.setIp(array[0]);
-                        b.setPort(NumberUtils.isDigits(array[1]) ? Integer.valueOf(array[1]) : 0);
-                        b.setWeight(NumberUtils.isDigits(array[2]) ? Integer.valueOf(array[2]) : 0);
-                        b.setProtocal(protocalService.findByName(array[3]));
-                        b.setGroup(groupService.findByName(array[4]));
-                        b.setProtocalName(array[3]);
-                        b.setGroupName(array[4]);
-                        weights.add(b);
+                        ProtocalDTO protocal = protocalService.findByName(array[3]);
+                        GroupDTO group = groupService.findByName(array[4]);
+
+                        if (protocal != null && group != null) {
+                            WeightBackendDTO b = new WeightBackendDTO();
+                            b.setIp(array[0]);
+                            b.setPort(NumberUtils.isDigits(array[1]) ? Integer.valueOf(array[1]) : 0);
+                            b.setWeight(NumberUtils.isDigits(array[2]) ? Integer.valueOf(array[2]) : 0);
+                            b.setProtocalName(array[3]);
+                            b.setGroupName(array[4]);
+                            b.setProtocal(protocal);
+                            b.setGroup(group);
+                            weights.add(b);
+                        }
                     }
                 });
                 if (weights.size() > 0) {
@@ -172,15 +186,20 @@ public class FileController {
                     // 192.168.1.249,8809,1234567890123456,watch,watch_group1
                     String[] array = e;
                     if (array.length == 5) {
-                        HashBackendDTO b = new HashBackendDTO();
-                        b.setIp(array[0]);
-                        b.setPort(NumberUtils.isDigits(array[1]) ? Integer.valueOf(array[1]) : 0);
-                        b.setKey(array[2]);
-                        b.setProtocal(protocalService.findByName(array[3]));
-                        b.setGroup(groupService.findByName(array[4]));
-                        b.setProtocalName(array[3]);
-                        b.setGroupName(array[4]);
-                        hashs.add(b);
+                        ProtocalDTO protocal = protocalService.findByName(array[3]);
+                        GroupDTO group = groupService.findByName(array[4]);
+
+                        if (protocal != null && group != null) {
+                            HashBackendDTO b = new HashBackendDTO();
+                            b.setIp(array[0]);
+                            b.setPort(NumberUtils.isDigits(array[1]) ? Integer.valueOf(array[1]) : 0);
+                            b.setKey(array[2]);
+                            b.setProtocalName(array[3]);
+                            b.setGroupName(array[4]);
+                            b.setProtocal(protocal);
+                            b.setGroup(group);
+                            hashs.add(b);
+                        }
                     }
                 });
                 if (hashs.size() > 0) {

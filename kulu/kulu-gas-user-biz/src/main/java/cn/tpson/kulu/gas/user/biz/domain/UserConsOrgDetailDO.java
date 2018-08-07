@@ -1,6 +1,6 @@
 package cn.tpson.kulu.gas.user.biz.domain;
 
-import cn.tpson.kulu.common.db.domain.BaseDO;
+import cn.tpson.kulu.common.jpa.db.domain.BaseDO;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 

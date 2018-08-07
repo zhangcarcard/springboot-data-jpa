@@ -1,8 +1,6 @@
 package cn.tpson.kulu.dispatcher.biz.service;
 
-import cn.tpson.kulu.common.service.local.BaseService;
-import cn.tpson.kulu.dispatcher.biz.domain.HashBackendDO;
-import cn.tpson.kulu.dispatcher.biz.domain.WeightBackendDO;
+import cn.tpson.kulu.common.jpa.service.local.BaseService;
 import cn.tpson.kulu.dispatcher.biz.dto.WeightBackendDTO;
 
 /**

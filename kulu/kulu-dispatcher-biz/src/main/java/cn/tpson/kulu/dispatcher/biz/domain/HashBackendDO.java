@@ -5,6 +5,7 @@ import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
@@ -20,6 +21,7 @@ import javax.persistence.Table;
 @DynamicUpdate
 @DynamicInsert
 public class HashBackendDO extends BackendDO {
+    @Column(length = 50, nullable = false)
     private String key;
 
     public HashBackendDO() {}

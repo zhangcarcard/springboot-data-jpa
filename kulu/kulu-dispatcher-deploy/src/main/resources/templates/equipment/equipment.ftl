@@ -40,6 +40,10 @@
                         <input type="text" name="name" class="form-control" id="name" placeholder="设备名称" required autofocus>
                     </div>
                     <div class="form-group">
+                        <label for="port">转发服务端口</label>
+                        <input type="number" name="port" class="form-control" id="port" placeholder="转发服务端口" required>
+                    </div>
+                    <div class="form-group">
                         <label for="comment">备注</label>
                         <input type="text" name="comment" class="form-control" id="comment" placeholder="备注">
                     </div>
@@ -64,13 +68,14 @@
                             return index + 1;
                         }},
                     {title: '名称', field: 'name', sortable: true, valign: 'middle'},
+                    {title: '转发服务端口', field: 'port', sortable: true, valign: 'middle'},
                     {title: '创建时间', field: 'gmtCreate', sortable: true, valign: 'middle'},
                     {title: '修改时间', field: 'gmtModified', sortable: true, valign: 'middle'},
                     {title: '备注', field: 'comment', valign: 'middle'},
                     {title: '操作', width: '15%', valign: 'middle', events: operateEvents,
                         formatter: function(value, row, index) {
                             return [
-                                '<button type="button" class="edit btn btn-success"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span> 编辑</button>'
+                                '<button type="button" class="edit btn btn-success btn-sm"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span> 编辑</button>'
                             ].join('');
                         }}
                 ]);
@@ -139,10 +144,9 @@
     window.operateEvents = {
         'click .edit': function (e, value, row, index) {
             formClear('#form');
-            $('#id').val(row.id);
-            $('#name').val(row.name);
-            $('#comment').val(row.comment);
-            $('#version').val(row.version);
+            for (var v in row) {
+                $('#' + v).val(row[v]);
+            }
 
             $('#addModalLabel').text('编辑');
             $('#addModal').modal();

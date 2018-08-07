@@ -1,8 +1,7 @@
 package cn.tpson.kulu.dispatcher.biz.domain;
 
-import cn.tpson.kulu.common.db.domain.BaseDO;
-import org.hibernate.annotations.SQLDelete;
-import org.hibernate.annotations.Where;
+
+import cn.tpson.kulu.common.jpa.db.domain.BaseDO;
 
 import javax.persistence.*;
 
@@ -12,32 +11,35 @@ import javax.persistence.*;
 
 @MappedSuperclass
 public class BackendDO extends BaseDO {
-    public BackendDO() {}
-    public BackendDO(String ip, Integer port) {
-        this.ip = ip;
-        this.port = port;
-    }
-
     /** ip地址 */
     @Column(length = 19, nullable = false)
     private String ip;
 
     /** port */
+    @Column(nullable = false)
     private Integer port;
 
     /** 协议名称 */
+    @Column(length = 50, nullable = false)
     private String protocalName;
 
     /** 分组名称 */
+    @Column(length = 50, nullable = false)
     private String groupName;
 
     @ManyToOne
-    @JoinColumn(name = "protocal_id", foreignKey = @ForeignKey(name = "fk_t_protocal_id"))
+    @JoinColumn(name = "protocal_id", nullable = false)
     private ProtocalDO protocal;
 
     @ManyToOne
-    @JoinColumn(name = "group_id", foreignKey = @ForeignKey(name = "fk_t_group_id"))
+    @JoinColumn(name = "group_id", nullable = false)
     private GroupDO group;
+
+    public BackendDO() {}
+    public BackendDO(String ip, Integer port) {
+        this.ip = ip;
+        this.port = port;
+    }
 
     public String getIp() {
         return ip;

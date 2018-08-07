@@ -2,7 +2,7 @@ package cn.tpson.kulu.gas.user;
 
 import cn.tpson.kulu.api.user.dto.UserConsOrgDetailDTO;
 import cn.tpson.kulu.api.user.service.RemoteUserConsOrgDetailService;
-import cn.tpson.kulu.common.service.remote.RemoteResult;
+import cn.tpson.kulu.common.jpa.service.remote.RemoteResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;

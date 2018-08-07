@@ -13,6 +13,7 @@ import cn.tpson.kulu.dispatcher.biz.service.ProtocalService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -47,18 +48,13 @@ public class HashBackendController {
 
     @ResponseBody
     @RequestMapping(value = "/hash.do", method = RequestMethod.GET)
-    public TableVO hash(Integer offset, Integer limit, String search) {
-        HashBackendQUERY query = new HashBackendQUERY(offset / limit, limit);
-        /*Like like = null;
-        if (StringUtils.isNotBlank(search)) {
-            like = Like.by(
-                    Like.Pair.by("key", "%" + search + "%"),
-                    Like.Pair.by("protocalName", "%" + search + "%"),
-                    Like.Pair.by("groupName", "%" + search + "%")
-            );
+    public TableVO list(Integer offset, Integer limit, String search, String order, String sortName) {
+        Sort sort = null;
+        if (StringUtils.isNotBlank(order) && StringUtils.isNotBlank(sortName)) {
+            sort = Sort.by(Sort.Direction.fromString(order.toUpperCase()), sortName);
         }
-        Page<HashBackendDTO> page = hashBackendService.pageByExample(query, like, null);*/
-        Page<HashBackendDTO> page = hashBackendService.findByNameContaining(query, null, search);
+        Page<HashBackendDTO> page = hashBackendService.pageByKeywordContaining(offset / limit, limit, sort, search);
+
         return TableVO.successResult(page.getTotalElements(), page.getContent());
     }
 

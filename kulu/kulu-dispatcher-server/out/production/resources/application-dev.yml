@@ -1,0 +1,18 @@
+debug: false
+
+kuluagent:
+  car:
+    boss: 1
+    worker: 0
+    backlog: 1024
+    port: 8888
+    timeout: 3000
+  watch:
+    boss: 1
+    worker: 0
+    backlog: 1024
+    port: 8887
+    timeout: 3000
+
+agent:
+  url: http://localhost:8081/protocal

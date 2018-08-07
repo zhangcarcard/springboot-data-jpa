@@ -2,7 +2,7 @@ package cn.tpson.kulu.gas.eqp.biz.domain;
 
 import cn.tpson.kulu.common.constant.EqpStatusEnum;
 import cn.tpson.kulu.common.constant.EqpTypeEnum;
-import cn.tpson.kulu.common.db.domain.BaseDO;
+import cn.tpson.kulu.common.jpa.db.domain.BaseDO;
 
 import javax.persistence.*;
 

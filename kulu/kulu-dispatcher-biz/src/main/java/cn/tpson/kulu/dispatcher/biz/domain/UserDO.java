@@ -1,6 +1,6 @@
 package cn.tpson.kulu.dispatcher.biz.domain;
 
-import cn.tpson.kulu.common.db.domain.BaseDO;
+import cn.tpson.kulu.common.jpa.db.domain.BaseDO;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.SQLDelete;
@@ -25,7 +25,7 @@ public class UserDO extends BaseDO {
     @Column(length = 20, nullable = false)
     private String username;
 
-    @Column(length = 1000)
+    @Column(length = 32, nullable = false)
     private String password;
 
     public UserDO() {}

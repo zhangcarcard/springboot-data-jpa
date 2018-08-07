@@ -66,8 +66,8 @@
                     <div class="form-group">
                         <label for="offsetType">位移类型</label>
                         <select name="offsetType" class="form-control" id="offsetType">
-                            <option value="1">分隔符</option>
-                            <option value="2">偏移量</option>
+                            <option value="分隔符">分隔符</option>
+                            <option value="偏移量">偏移量</option>
                         </select>
                     </div>
                     <div class="form-group" name="split">
@@ -217,13 +217,13 @@
     }
 
     function offsetTypeChanged(type) {
-        if (type == "1") {
+        if (type == "分隔符") {
             $("div[name=split]").removeClass("hide");
             $("div[name=offset]").addClass("hide");
             $("#split").attr("required", "required");
             $("#offset").removeAttr("required")
             $("#offset").val('')
-        } else if (type == "2") {
+        } else if (type == "偏移量") {
             $("div[name=offset]").removeClass("hide");
             $("div[name=split]").addClass("hide");
             $("#offset").attr("required", "required");

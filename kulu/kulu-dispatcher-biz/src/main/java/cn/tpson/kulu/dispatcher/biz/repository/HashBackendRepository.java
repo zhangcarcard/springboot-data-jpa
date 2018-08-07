@@ -9,10 +9,14 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.util.List;
+
 /**
  * Created by Zhangka in 2018/08/01
  */
 public interface HashBackendRepository extends BaseRepository<HashBackendDO, Long> {
-    @Query("select h from HashBackend h where concat(h.key, h.protocalName, h.groupName, h.protocal.eqpName) like :name")
-    Page<HashBackendDO> findByNameContaining(Pageable pageable, @Param("name")String name);
+    @Query("select d from HashBackend d where concat(coalesce(d.key, ''), coalesce(d.protocalName, ''), coalesce(d.groupName, ''), coalesce(d.protocal.eqpName, '')) like :keyword")
+    Page<HashBackendDO> findByKeywordContaining(Pageable pageable, @Param("keyword")String keyword);
+
+    List<HashBackendDO> findByKey(String key);
 }

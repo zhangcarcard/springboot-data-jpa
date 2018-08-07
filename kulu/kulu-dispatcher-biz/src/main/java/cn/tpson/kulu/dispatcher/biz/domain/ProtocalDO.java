@@ -1,6 +1,6 @@
 package cn.tpson.kulu.dispatcher.biz.domain;
 
-import cn.tpson.kulu.common.db.domain.BaseDO;
+import cn.tpson.kulu.common.jpa.db.domain.BaseDO;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.SQLDelete;
@@ -12,7 +12,7 @@ import javax.persistence.*;
  * Created by Zhangka in 2018/08/01
  */
 @Entity(name = "Protocal")
-@Table(name = "t_protocal", uniqueConstraints = @UniqueConstraint(name = "uk_t_protocal_name", columnNames = "name"))
+@Table(name = "t_protocal")
 @SequenceGenerator(name = "generator", sequenceName = "t_protocal_seq", allocationSize = 1)
 @SQLDelete(sql = "UPDATE t_protocal SET is_deleted = true, gmt_modified = now() WHERE id = ? AND version = ?")
 @Where(clause = "is_deleted = false")
@@ -22,10 +22,10 @@ public class ProtocalDO extends BaseDO {
     @Column(length = 50, nullable = false)
     private String name;
 
-    @Column(length = 10)
+    @Column(length = 10, nullable = false)
     private String startFlag;
 
-    @Column(length = 10)
+    @Column(length = 10, nullable = false)
     private String endFlag;
 
     @Column(length = 10)
@@ -34,11 +34,14 @@ public class ProtocalDO extends BaseDO {
     @Column(name = "offset_num")
     private Integer offset;
 
-    private Integer offsetType;
+    @Column(length = 10, nullable = false)
+    private String offsetType;
+
+    @Column(nullable = false)
     private Integer count;
 
     @ManyToOne
-    @JoinColumn(name = "eqp_id", foreignKey = @ForeignKey(name = "fk_t_equipment_id"))
+    @JoinColumn(name = "eqp_id")
     private EquipmentDO equipment;
 
     /** 所属设备 */
@@ -92,11 +95,11 @@ public class ProtocalDO extends BaseDO {
         this.offset = offset;
     }
 
-    public Integer getOffsetType() {
+    public String getOffsetType() {
         return offsetType;
     }
 
-    public void setOffsetType(Integer offsetType) {
+    public void setOffsetType(String offsetType) {
         this.offsetType = offsetType;
     }
 

@@ -1,6 +1,6 @@
 package cn.tpson.kulu.dispatcher.biz.service;
 
-import cn.tpson.kulu.common.service.local.BaseService;
+import cn.tpson.kulu.common.jpa.service.local.BaseService;
 import cn.tpson.kulu.dispatcher.biz.dto.EquipmentDTO;
 
 /**
@@ -8,4 +8,7 @@ import cn.tpson.kulu.dispatcher.biz.dto.EquipmentDTO;
  */
 public interface EquipmentService extends BaseService<EquipmentDTO> {
     EquipmentDTO findByName(String name);
+
+    EquipmentDTO findByPort(Integer port);
+
 }

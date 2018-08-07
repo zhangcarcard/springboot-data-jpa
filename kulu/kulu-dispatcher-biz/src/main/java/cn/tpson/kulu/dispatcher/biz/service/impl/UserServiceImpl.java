@@ -1,6 +1,6 @@
 package cn.tpson.kulu.dispatcher.biz.service.impl;
 
-import cn.tpson.kulu.common.service.local.BaseServiceImpl;
+import cn.tpson.kulu.common.jpa.service.local.BaseServiceImpl;
 import cn.tpson.kulu.common.util.BeanUtils;
 import cn.tpson.kulu.dispatcher.biz.domain.UserDO;
 import cn.tpson.kulu.dispatcher.biz.dto.UserDTO;

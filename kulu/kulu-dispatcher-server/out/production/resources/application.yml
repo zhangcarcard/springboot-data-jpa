@@ -1,0 +1,10 @@
+logging:
+  path: ${user.home}/logs/dispatcher
+  file:
+    max-size: 50MB
+server:
+  port: 8082
+
+spring:
+  profiles:
+    active: dev

@@ -19,8 +19,7 @@ archivesBaseName = 'kulu-dispatcher-biz'
 version = '1.0.0'
  
 dependencies {
-    compile project(':kulu-common')
-    compile project(':kulu-api')
+    compile project(':kulu-jpa-common')
 
     compile "org.springframework.boot:spring-boot-starter-data-jpa:${springBootVersion}"
     compile "org.springframework.boot:spring-boot-starter-actuator:${springBootVersion}"

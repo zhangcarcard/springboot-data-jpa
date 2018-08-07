@@ -5,9 +5,12 @@ import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+import javax.xml.bind.DatatypeConverter;
+import java.io.UnsupportedEncodingException;
 
 /**
  * Created by Zhangka in 2018/08/01
@@ -20,6 +23,7 @@ import javax.persistence.Table;
 @DynamicUpdate
 @DynamicInsert
 public class WeightBackendDO extends BackendDO {
+    @Column(nullable = false)
     private Integer weight;
 
     public WeightBackendDO() {}

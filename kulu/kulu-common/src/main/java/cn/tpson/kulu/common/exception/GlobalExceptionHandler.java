@@ -1,16 +1,13 @@
 package cn.tpson.kulu.common.exception;
 
 import cn.tpson.kulu.common.dto.vo.ResultVO;
-import org.hibernate.exception.ConstraintViolationException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.dao.DataIntegrityViolationException;
+import cn.tpson.kulu.common.logger.Logger;
+import cn.tpson.kulu.common.logger.LoggerFactory;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.NoHandlerFoundException;
 
@@ -21,7 +18,7 @@ import javax.servlet.http.HttpServletRequest;
  */
 @RestControllerAdvice
 class GlobalExceptionHandler {
-    private static final Logger LOGGER = LoggerFactory.getLogger(GlobalExceptionHandler.class);
+    private static final Logger log = LoggerFactory.getLogger(GlobalExceptionHandler.class);
 
     @ExceptionHandler(value = Throwable.class)
     public String defaultErrorHandler(HttpServletRequest req, Throwable e) {
@@ -52,9 +49,7 @@ class GlobalExceptionHandler {
             message = e.getMessage();
         }
 
-        if (LOGGER.isErrorEnabled()) {
-            LOGGER.error("捕获异常", e);
-        }
+        log.error("捕获异常", e);
         return ResultVO.failResult(message, errorCode).toString();
     }
 }
