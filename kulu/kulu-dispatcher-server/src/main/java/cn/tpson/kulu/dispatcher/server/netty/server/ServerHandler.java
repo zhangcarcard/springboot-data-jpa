@@ -5,6 +5,8 @@ import cn.tpson.kulu.common.logger.LoggerFactory;
 import cn.tpson.kulu.dispatcher.server.netty.client.KuluAgent;
 import cn.tpson.kulu.dispatcher.server.service.RemoteBackendService;
 import cn.tpson.kulu.dispatcher.server.vo.BackendVO;
+import cn.tpson.kulu.dispatcher.server.vo.HexMsgVO;
+import com.alibaba.fastjson.JSON;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.Channel;
@@ -18,14 +20,13 @@ import org.springframework.data.redis.core.RedisOperations;
 import org.springframework.data.redis.core.RedisTemplate;
 
 import javax.xml.bind.DatatypeConverter;
-import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * Created by Zhangka in 2018/04/20
  */
 public abstract class ServerHandler extends ChannelInboundHandlerAdapter {
     public static final String DISPATCHER_CONNECTION_HASH = "DISPATCHER_CONNECTION_HASH";
-    public static final String DISPATCHER_HEXMSG_LIST_PREFIX = "DISPATCHER_HEXMSG_LIST_";
+    public static final String DISPATCHER_HEXMSG_LIST = "DISPATCHER_HEXMSG_LIST";
 
     protected static final int MAX_BUFFER_SIZE = 256;
     public static final AttributeKey<Channel> P = AttributeKey.valueOf("platform");
@@ -34,7 +35,6 @@ public abstract class ServerHandler extends ChannelInboundHandlerAdapter {
     protected final AttributeKey<ByteBuf> b = AttributeKey.valueOf("buffers");
 
     private Integer serverPort;
-    private final AtomicInteger connections = new AtomicInteger(0);
     private static final Logger log = LoggerFactory.getLogger(ServerHandler.class);
 
     @Autowired
@@ -51,7 +51,6 @@ public abstract class ServerHandler extends ChannelInboundHandlerAdapter {
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) {
         Channel platform = ctx.channel().attr(P).get();
-        log.info("{}-Connections:{}", getServerPort(), connections.get());
 
         // 已连接，直接转发
         if (platform != null) {
@@ -94,9 +93,9 @@ public abstract class ServerHandler extends ChannelInboundHandlerAdapter {
         logHexMsg(key, hexMsg);
         platform = kuluAgent.connect(backend.getIp(), backend.getPort());
         Channel eqp = ctx.channel();
+        platform.attr(P).setIfAbsent(eqp);
         eqp.attr(E).setIfAbsent(platform);
         eqp.attr(K).setIfAbsent(key);
-        platform.attr(P).setIfAbsent(eqp);
         flowControlExecutor.addChannel(platform);
         flowControlExecutor.addChannel(eqp);
         buf.readerIndex(0);
@@ -113,16 +112,14 @@ public abstract class ServerHandler extends ChannelInboundHandlerAdapter {
     @Override
     public void channelInactive(ChannelHandlerContext ctx) {
         log.info("channelInactive");
-        connections.decrementAndGet();
         close(ctx);
-        logConnections();
+        logIsActive(ctx.channel().attr(K).get(), false);
     }
 
     @Override
     public void channelActive(ChannelHandlerContext ctx) {
         log.info("channelActive");
-        connections.incrementAndGet();
-        logConnections();
+        logIsActive(ctx.channel().attr(K).get(), true);
     }
 
     public void close(ChannelHandlerContext ctx) {
@@ -137,7 +134,6 @@ public abstract class ServerHandler extends ChannelInboundHandlerAdapter {
             log.info("platform.close():{}", platform);
             platform.close();
         }
-        log.info("Connections:{}", connections.get());
     }
 
     public Integer getServerPort() {
@@ -155,14 +151,20 @@ public abstract class ServerHandler extends ChannelInboundHandlerAdapter {
         return DatatypeConverter.printHexBinary(dst);
     }
 
-    protected void logConnections() {
-        HashOperations<String, String, Integer> hashOperations = redisTemplate.opsForHash();
-        hashOperations.put(DISPATCHER_CONNECTION_HASH, String.valueOf(getServerPort()), connections.get());
+    protected void logIsActive(String key, boolean isActive) {
+        log.info("key:{}, isActive:{}", key, isActive);
+        if (StringUtils.isNotBlank(key)) {
+            HashOperations<String, String, Integer> hashOperations = redisTemplate.opsForHash();
+            hashOperations.put(DISPATCHER_CONNECTION_HASH, key, isActive ? 1 : 0);
+        }
     }
 
     protected void logHexMsg(String key, String hexMsg) {
         log.info("key:{}, content hex:{}", key, hexMsg);
-        RedisOperations<String, String> redisOperations = redisTemplate.opsForList().getOperations();
-        redisOperations.opsForList().leftPush(DISPATCHER_HEXMSG_LIST_PREFIX + getServerPort(), hexMsg);
+        if (StringUtils.isNotBlank(key) && StringUtils.isNotBlank(hexMsg)) {
+            RedisOperations<String, String> redisOperations = redisTemplate.opsForList().getOperations();
+            HexMsgVO hexMsgVO = new HexMsgVO(getServerPort(), key, hexMsg);
+            redisOperations.opsForList().rightPush(DISPATCHER_HEXMSG_LIST, JSON.toJSONString(hexMsgVO));
+        }
     }
 }

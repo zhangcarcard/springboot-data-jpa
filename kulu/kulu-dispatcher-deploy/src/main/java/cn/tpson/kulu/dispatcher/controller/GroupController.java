@@ -4,11 +4,13 @@ import cn.tpson.kulu.common.dto.vo.ResultVO;
 import cn.tpson.kulu.common.dto.vo.TableVO;
 import cn.tpson.kulu.dispatcher.biz.dto.GroupDTO;
 import cn.tpson.kulu.dispatcher.biz.service.GroupService;
+import cn.tpson.kulu.dispatcher.biz.service.ProtocalService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -23,10 +25,13 @@ import java.util.ArrayList;
 @RequestMapping("/group")
 public class GroupController {
     @Autowired
-    GroupService groupService;
+    private GroupService groupService;
+    @Autowired
+    private ProtocalService protocalService;
 
     @RequestMapping(value = "/group.html", method = RequestMethod.GET)
-    public String html() {
+    public String html(Model model) {
+        model.addAttribute("protocals", protocalService.findAll());
         return "group/group";
     }
 

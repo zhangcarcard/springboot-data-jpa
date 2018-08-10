@@ -33,4 +33,6 @@ dependencies {
     compile "org.springframework.boot:spring-boot-starter-data-redis:${springBootVersion}"
     compile "org.springframework.boot:spring-boot-starter-actuator:${springBootVersion}"
     testCompile "org.springframework.boot:spring-boot-starter-test:${springBootVersion}"
+    compile "org.springframework.boot:spring-boot-starter-websocket:${springBootVersion}"
+    compile 'org.apache.commons:commons-pool2:2.6.0'
 }

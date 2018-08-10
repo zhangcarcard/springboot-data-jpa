@@ -5,12 +5,16 @@ import cn.tpson.kulu.common.util.BeanUtils;
 import cn.tpson.kulu.dispatcher.biz.domain.GroupDO;
 import cn.tpson.kulu.dispatcher.biz.dto.GroupDTO;
 import cn.tpson.kulu.dispatcher.biz.repository.GroupRepository;
+import cn.tpson.kulu.dispatcher.biz.service.BackendService;
 import cn.tpson.kulu.dispatcher.biz.service.GroupService;
+import cn.tpson.kulu.dispatcher.biz.service.HashLoadBalanceService;
+import cn.tpson.kulu.dispatcher.biz.service.ProtocalService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -21,6 +25,10 @@ import java.util.List;
 public class GroupServiceImpl extends BaseServiceImpl<GroupDTO, GroupDO> implements GroupService {
     @Autowired
     private GroupRepository groupRepository;
+    @Autowired
+    private HashLoadBalanceService hashLoadBalanceService;
+    @Autowired
+    private BackendService backendService;
 
     @Override
     public Page<GroupDTO> pageByKeywordContaining(Integer pageNumber, Integer pageSize, Sort sort, String search) {
@@ -35,5 +43,17 @@ public class GroupServiceImpl extends BaseServiceImpl<GroupDTO, GroupDO> impleme
     @Override
     public GroupDTO findByName(String name) {
         return BeanUtils.newAndCopyProperties(GroupDTO.class, groupRepository.findByName(name));
+    }
+
+    @Transactional
+    @Override
+    public void deleteAllEntity(Iterable<GroupDTO> entities) {
+        Iterator<GroupDTO> iterator = entities.iterator();
+        while (iterator.hasNext()) {
+            GroupDTO group = iterator.next();
+            hashLoadBalanceService.deleteAllEntity(hashLoadBalanceService.findByGroup(group));
+            backendService.deleteAllEntity(backendService.findByGroupId(group.getId()));
+        }
+        super.deleteAllEntity(entities);
     }
 }

@@ -15,7 +15,22 @@ spring:
     hibernate:
       ddl-auto: update
 
+  redis:
+    database: 0
+    host: 182.61.20.179
+    port: 6379
+    password: kulu###2018
+    timeout: 60000ms
+    lettuce:
+      pool:
+        max-active: 100
+        max-wait: -1ms
+        max-idle: 8
+        min-idle: 8
 logging:
   level:
     cn.tpson.kulu: info
 debug: false
+
+mq:
+  timeout: 30000

@@ -1,9 +1,9 @@
 package cn.tpson.kulu.dispatcher.biz.service.impl;
 
 import cn.tpson.kulu.common.jpa.service.local.BaseServiceImpl;
-import cn.tpson.kulu.dispatcher.biz.domain.WeightBackendDO;
-import cn.tpson.kulu.dispatcher.biz.dto.WeightBackendDTO;
-import cn.tpson.kulu.dispatcher.biz.service.WeightBackendService;
+import cn.tpson.kulu.dispatcher.biz.domain.HexMsgDO;
+import cn.tpson.kulu.dispatcher.biz.dto.HexMsgDTO;
+import cn.tpson.kulu.dispatcher.biz.service.HexMsgService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -12,5 +12,5 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @Service
 @Transactional(readOnly = true)
-public class WeightBackendServiceImpl extends BaseServiceImpl<WeightBackendDTO, WeightBackendDO> implements WeightBackendService {
+public class HexMsgServiceImpl extends BaseServiceImpl<HexMsgDTO, HexMsgDO> implements HexMsgService {
 }

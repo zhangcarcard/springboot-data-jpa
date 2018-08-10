@@ -9,17 +9,24 @@
 <body>
 <#include "/fileupload.ftl">
 <div class="container">
-    <@common.nav menu="equipment" submenu="equipment" />
-
-    <div id="toolbar" class="btn-group">
-        <button id="btn_add" type="button" class="btn btn-default">
-            <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>新增
-        </button>
-        <button id="btn_delete" type="button" class="btn btn-default">
-            <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>删除
-        </button>
+    <div class="row">
+        <@common.nav menu="equipment" submenu="equipment" />
     </div>
-    <table id="table"></table>
+
+    <div class="row">
+        <#include "/statistics.ftl">
+        <div class="col-sm-10">
+            <div id="toolbar" class="btn-group">
+                <button id="btn_add" type="button" class="btn btn-default">
+                    <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>新增
+                </button>
+                <button id="btn_delete" type="button" class="btn btn-default">
+                    <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>删除
+                </button>
+            </div>
+            <table id="table"></table>
+        </div>
+    </div>
 </div>
 
 <div class="modal fade" id="addModal" tabindex="-1" role="dialog" aria-labelledby="addModalLabel">
@@ -40,7 +47,7 @@
                         <input type="text" name="name" class="form-control" id="name" placeholder="设备名称" required autofocus>
                     </div>
                     <div class="form-group">
-                        <label for="port">转发服务端口</label>
+                        <label for="port">接入端口</label>
                         <input type="number" name="port" class="form-control" id="port" placeholder="转发服务端口" required>
                     </div>
                     <div class="form-group">
@@ -68,7 +75,7 @@
                             return index + 1;
                         }},
                     {title: '名称', field: 'name', sortable: true, valign: 'middle'},
-                    {title: '转发服务端口', field: 'port', sortable: true, valign: 'middle'},
+                    {title: '接入端口', field: 'port', sortable: true, valign: 'middle'},
                     {title: '创建时间', field: 'gmtCreate', sortable: true, valign: 'middle'},
                     {title: '修改时间', field: 'gmtModified', sortable: true, valign: 'middle'},
                     {title: '备注', field: 'comment', valign: 'middle'},

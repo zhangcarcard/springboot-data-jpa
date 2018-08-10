@@ -39,7 +39,8 @@ public class MessageDigestUtils {
         try {
             messageDigest = MessageDigest.getInstance("MD5");
             messageDigest.update(str.getBytes("UTF-8"));
-            encodeStr = byte2Hex(messageDigest.digest());
+            byte[] digest = messageDigest.digest();
+            encodeStr = byte2Hex(digest);
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
         } catch (UnsupportedEncodingException e) {

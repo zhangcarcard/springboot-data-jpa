@@ -15,6 +15,9 @@
         </div>
         <div id="navbar-menu" class="collapse navbar-collapse">
             <ul class="nav navbar-nav">
+                <!--<li <#if menu == "equipment" && submenu == "equipment">class="active"</#if>><a href="/equipment/equipment.html">设备类型</a></li>-->
+                <li <#if menu == "protocal" && submenu == "protocal">class="active"</#if>><a href="/protocal/protocal.html">协议</a></li>
+                <li <#if menu == "group" && submenu == "group">class="active"</#if>><a href="/group/group.html">分组</a></li>
                 <li class="dropdown <#if menu == "watch">active</#if>">
                     <a href="javascript:" data-toggle="dropdown">
                         转发策略
@@ -26,9 +29,6 @@
                         <li <#if menu == "loadbalance" && submenu == "hash">class="active"</#if>><a href="/lb/hash.html">HASH</a></li>
                     </ul>
                 </li>
-                <li <#if menu == "protocal" && submenu == "protocal">class="active"</#if>><a href="/protocal/protocal.html">协议</a></li>
-                <li <#if menu == "group" && submenu == "group">class="active"</#if>><a href="/group/group.html">分组</a></li>
-                <li <#if menu == "equipment" && submenu == "equipment">class="active"</#if>><a href="/equipment/equipment.html">设备类型</a></li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
                 <li><a href="/logout.do">退出</a></li>

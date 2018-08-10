@@ -8,4 +8,6 @@ import cn.tpson.kulu.dispatcher.biz.dto.GroupDTO;
  */
 public interface GroupService extends BaseService<GroupDTO> {
     GroupDTO findByName(String name);
+
+    void deleteAllEntity(Iterable<GroupDTO> entities);
 }

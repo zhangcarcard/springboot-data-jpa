@@ -3,14 +3,11 @@ package cn.tpson.kulu.dispatcher.controller;
 import cn.tpson.kulu.common.constant.ErrorCodeEnum;
 import cn.tpson.kulu.common.dto.vo.ResultVO;
 import cn.tpson.kulu.common.dto.vo.TableVO;
-import cn.tpson.kulu.common.jpa.support.Like;
-import cn.tpson.kulu.dispatcher.biz.dto.EquipmentDTO;
-import cn.tpson.kulu.dispatcher.biz.dto.HashBackendDTO;
-import cn.tpson.kulu.dispatcher.biz.dto.ProtocalDTO;
-import cn.tpson.kulu.dispatcher.biz.dto.query.EquipmentQUERY;
+import cn.tpson.kulu.dispatcher.biz.dto.*;
 import cn.tpson.kulu.dispatcher.biz.dto.query.ProtocalQUERY;
+import cn.tpson.kulu.dispatcher.biz.service.BackendService;
 import cn.tpson.kulu.dispatcher.biz.service.EquipmentService;
-import cn.tpson.kulu.dispatcher.biz.service.HashBackendService;
+import cn.tpson.kulu.dispatcher.biz.service.HashLoadBalanceService;
 import cn.tpson.kulu.dispatcher.biz.service.ProtocalService;
 import cn.tpson.kulu.dispatcher.util.ProtocalUtils;
 import cn.tpson.kulu.dispatcher.vo.BackendVO;
@@ -24,11 +21,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.client.RestTemplate;
 
 import javax.xml.bind.DatatypeConverter;
-import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -42,9 +36,9 @@ public class ProtocalController {
     @Autowired
     private ProtocalService protocalService;
     @Autowired
-    private EquipmentService equipmentService;
+    private HashLoadBalanceService hashLoadBalanceService;
     @Autowired
-    private HashBackendService hashBackendService;
+    private BackendService backendService;
 
     /**
      *
@@ -53,7 +47,6 @@ public class ProtocalController {
      */
     @RequestMapping(value = "/protocal.html", method = RequestMethod.GET)
     public String html(Model model) {
-        model.addAttribute("equipments", equipmentService.findAll());
         return "protocal/protocal";
     }
 
@@ -91,8 +84,6 @@ public class ProtocalController {
                 return ResultVO.failResult("名称不能重复.");
             }
         }
-
-        protocal.setEquipment(equipmentService.findByName(protocal.getEqpName()));
         return protocalService.save(protocal) > 0
                 ? ResultVO.successResult()
                 : ResultVO.failResult("添加失败.");
@@ -123,13 +114,8 @@ public class ProtocalController {
             return ResultVO.failResult(ErrorCodeEnum.RESULT_NOT_FOUND);
         }
 
-        EquipmentDTO equipment = equipmentService.findByPort(serverPort);
-        if (equipment == null) {
-            return ResultVO.failResult(ErrorCodeEnum.RESULT_NOT_FOUND);
-        }
-
         ProtocalQUERY query = new ProtocalQUERY();
-        query.setEquipment(equipment);
+        query.setPort(serverPort);
         List<ProtocalDTO> protocals = protocalService.findByExample(query);
         if (protocals.isEmpty()) {
             return ResultVO.failResult(ErrorCodeEnum.RESULT_NOT_FOUND);
@@ -145,41 +131,34 @@ public class ProtocalController {
 
     /**
      *
-     * @param serverPort
      * @param key
      * @return
      */
     @ResponseBody
     @RequestMapping(value = "/backend.do", method = RequestMethod.GET)
-    public ResultVO backend(Integer serverPort, String key) {
-        if (serverPort == null || StringUtils.isBlank(key)) {
+    public ResultVO backend(String key) {
+        if (StringUtils.isBlank(key)) {
             return ResultVO.failResult(ErrorCodeEnum.RESULT_NOT_FOUND);
         }
 
-        EquipmentDTO equipment = equipmentService.findByPort(serverPort);
-        if (equipment == null) {
+        //转发策略
+        List<HashLoadBalanceDTO> list = hashLoadBalanceService.findByKey(key);
+        if (list.isEmpty()) {
             return ResultVO.failResult(ErrorCodeEnum.RESULT_NOT_FOUND);
         }
 
-        ProtocalQUERY query = new ProtocalQUERY();
-        query.setEquipment(equipment);
-        List<ProtocalDTO> protocals = protocalService.findByExample(query);
-        if (protocals.isEmpty()) {
-            return ResultVO.failResult(ErrorCodeEnum.RESULT_NOT_FOUND);
-        }
-
-        List<HashBackendDTO> backends = hashBackendService.findByKey(key);
-        for (ProtocalDTO p : protocals) {
-            for (HashBackendDTO b : backends) {
-                if (Objects.equals(p.getId(), b.getProtocal().getId())) {
-                    BackendVO vo = new BackendVO(b.getIp(), b.getPort(), key, b.getGroupName(), b.getProtocal().getName(), equipment.getName(), serverPort);
-                    return ResultVO.successResult(vo);
-                }
+        BackendVO vo = null;
+        HashLoadBalanceDTO hash = list.get(0);
+        List<BackendDTO> backends = backendService.findByGroupId(hash.getGroup().getId());
+        for (BackendDTO b : backends) {
+            if (Objects.equals(hash.getEqpName(), b.getEqpName())) {
+                vo = new BackendVO(b.getIp(), b.getPort(), key, hash.getGroup().getName(), null, b.getEqpName(), null);
+                break;
             }
         }
 
-        return StringUtils.isBlank(key)
+        return vo == null
                 ? ResultVO.failResult(ErrorCodeEnum.RESULT_NOT_FOUND)
-                : ResultVO.successResult(key);
+                : ResultVO.successResult(vo);
     }
 }

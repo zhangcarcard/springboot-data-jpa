@@ -10,25 +10,32 @@
 <#include "/fileupload.ftl">
 
 <div class="container">
-    <@common.nav menu="loadbalance" submenu="hash" />
+    <div class="row">
+        <@common.nav menu="loadbalance" submenu="hash" />
+    </div>
 
-    <div id="toolbar">
-        <div class="btn-group">
-            <button id="btn_add" type="button" class="btn btn-default">
-                <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>新增
-            </button>
-            <button id="btn_delete" type="button" class="btn btn-default">
-                <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>删除
-            </button>
-            <button id="btn_batch" type="button" class="btn btn-default">
-                <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>批量导入
-            </button>
-            <a type="button" class="btn btn-default" href="/file/template/hash.do">
-                <span class="glyphicon glyphicon-cloud-download" aria-hidden="true"></span>模板下载
-            </a>
+    <div class="row">
+        <#include "/statistics.ftl">
+        <div class="col-sm-10">
+            <div id="toolbar">
+                <div class="btn-group">
+                    <button id="btn_add" type="button" class="btn btn-default">
+                        <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>新增
+                    </button>
+                    <button id="btn_delete" type="button" class="btn btn-default">
+                        <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>删除
+                    </button>
+                    <button id="btn_batch" type="button" class="btn btn-default">
+                        <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>批量导入
+                    </button>
+                    <a type="button" class="btn btn-default" href="/file/template/hash.do">
+                        <span class="glyphicon glyphicon-cloud-download" aria-hidden="true"></span>模板下载
+                    </a>
+                </div>
+            </div>
+            <table id="table"></table>
         </div>
     </div>
-    <table id="table"></table>
 </div>
 
 <div class="modal fade" id="addModal" tabindex="-1" role="dialog" aria-labelledby="addModalLabel">
@@ -41,36 +48,30 @@
             <div class="modal-body">
                 <form id="form">
                     <div class="form-group">
-                        <label for="ip">IP</label>
-                        <input type="text" name="ip" class="form-control" id="ip" placeholder="IP或者域名" required autofocus>
+                        <input type="hidden" name="id" class="form-control" id="id">
+                        <input type="hidden" name="version" class="form-control" id="version">
                     </div>
                     <div class="form-group">
-                        <label for="port">PORT</label>
-                        <input type="number" name="port" class="form-control" id="port" placeholder="端口号" required>
+                        <label for="name">名称</label>
+                        <input type="text" name="name" class="form-control" id="name" placeholder="名称" required>
                     </div>
                     <div class="form-group">
                         <label for="key">KEY</label>
                         <input type="text" name="key" class="form-control" id="key" placeholder="根据协议解析出来的KEY" required>
                     </div>
                     <div class="form-group">
-                        <label for="protocalName">协议名称</label>
-                        <select name="protocalName" class="form-control" id="protocalName">
-                            <#if protocals??>
-                                <#list protocals as protocal>
-                                <option value="${(protocal.name)!}">${(protocal.name)!}</option>
+                        <label for="groupId">分组名称</label>
+                        <select name="groupId" class="form-control" id="groupId" required>
+                            <#if groups??>
+                                <#list groups as group>
+                                <option value="${(group.id)!}">${(group.name)!}</option>
                                 </#list>
                             </#if>
                         </select>
                     </div>
                     <div class="form-group">
-                        <label for="groupName">分组名称</label>
-                        <select name="groupName" class="form-control" id="groupName">
-                            <#if groups??>
-                                <#list groups as group>
-                                <option value="${(group.name)!}">${(group.name)!}</option>
-                                </#list>
-                            </#if>
-                        </select>
+                        <label for="eqpName">设备类型</label>
+                        <input type="text" name="eqpName" class="form-control" id="eqpName" placeholder="设备类型" required>
                     </div>
 
                     <div class="modal-footer">
@@ -92,12 +93,12 @@
                     {title: '序号', valign: 'middle', formatter: function(value, row, index) {
                             return index + 1;
                         }},
-                    {title: '名称', field: 'protocalName', sortable: true, valign: 'middle'},
+                    {title: '名称', field: 'name', sortable: true, valign: 'middle'},
                     {title: 'KEY', field: 'key', sortable: true, valign: 'middle'},
-                    {title: '分组名称', field: 'groupName', sortable: true, valign: 'middle'},
-                    {title: '设备名称', field: 'eqpName', sortable: true, valign: 'middle', formatter: function (value, row, index) {
-                            return row.protocal == undefined ? null : row.protocal.eqpName;
-                        }},
+                    {title: '分组名称', field: 'groupName', sortable: true, valign: 'middle', formatter: function (value, row, index) {
+                            return row.group == undefined ? null : row.group.name;
+                    }},
+                    {title: '设备名称', field: 'eqpName', sortable: true, valign: 'middle'},
                     {title: '创建时间', field: 'gmtCreate', sortable: true, valign: 'middle'},
                     {title: '修改时间', field: 'gmtModified', sortable: true, valign: 'middle'},
                     {title: '操作', valign: 'middle', events: operateEvents,
@@ -121,7 +122,7 @@
             $("#fileinputModal").modal("show");
         });
         $("#btn_add").click(function() {
-            $("#form")[0].reset();
+            formClear('#form');
             $("#addModalLabel").text("新增");
             $('#addModal').modal();
         });
@@ -180,7 +181,11 @@
         'click .edit': function (e, value, row, index) {
             formClear('#form');
             for (var v in row) {
-                $('#' + v).val(row[v]);
+                if (v == 'groupId' && row.group != undefined) {
+                    $('#groupId').val(row.group.id);
+                } else {
+                    $('#' + v).val(row[v]);
+                }
             }
 
             $('#addModalLabel').text('编辑');

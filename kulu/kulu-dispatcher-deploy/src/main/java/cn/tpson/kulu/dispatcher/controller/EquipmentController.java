@@ -2,15 +2,8 @@ package cn.tpson.kulu.dispatcher.controller;
 
 import cn.tpson.kulu.common.dto.vo.ResultVO;
 import cn.tpson.kulu.common.dto.vo.TableVO;
-import cn.tpson.kulu.common.jpa.support.Like;
 import cn.tpson.kulu.dispatcher.biz.dto.EquipmentDTO;
-import cn.tpson.kulu.dispatcher.biz.dto.GroupDTO;
-import cn.tpson.kulu.dispatcher.biz.dto.HashBackendDTO;
-import cn.tpson.kulu.dispatcher.biz.dto.query.EquipmentQUERY;
-import cn.tpson.kulu.dispatcher.biz.dto.query.GroupQUERY;
-import cn.tpson.kulu.dispatcher.biz.dto.query.HashBackendQUERY;
 import cn.tpson.kulu.dispatcher.biz.service.EquipmentService;
-import cn.tpson.kulu.dispatcher.biz.service.GroupService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;

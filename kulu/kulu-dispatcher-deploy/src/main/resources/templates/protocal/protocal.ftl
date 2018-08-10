@@ -9,23 +9,30 @@
 <body>
 <#include "/fileupload.ftl">
 <div class="container">
-    <@common.nav menu="protocal" submenu="protocal" />
-
-    <div id="toolbar" class="btn-group">
-        <button id="btn_add" type="button" class="btn btn-default">
-            <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>新增
-        </button>
-        <button id="btn_delete" type="button" class="btn btn-default">
-            <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>删除
-        </button>
-        <button id="btn_batch" type="button" class="btn btn-default">
-            <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>批量导入
-        </button>
-        <a type="button" class="btn btn-default" href="/file/template/protocal.do">
-            <span class="glyphicon glyphicon-cloud-download" aria-hidden="true"></span>模板下载
-        </a>
+    <div class="row">
+        <@common.nav menu="protocal" submenu="protocal" />
     </div>
-    <table id="table"></table>
+
+    <div class="row">
+        <#include "/statistics.ftl">
+        <div class="col-sm-10">
+            <div id="toolbar" class="btn-group">
+                <button id="btn_add" type="button" class="btn btn-default">
+                    <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>新增
+                </button>
+                <button id="btn_delete" type="button" class="btn btn-default">
+                    <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>删除
+                </button>
+                <button id="btn_batch" type="button" class="btn btn-default">
+                    <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>批量导入
+                </button>
+                <a type="button" class="btn btn-default" href="/file/template/protocal.do">
+                    <span class="glyphicon glyphicon-cloud-download" aria-hidden="true"></span>模板下载
+                </a>
+            </div>
+            <table id="table"></table>
+        </div>
+    </div>
 </div>
 
 <div class="modal fade" id="addModal" tabindex="-1" role="dialog" aria-labelledby="addModalLabel">
@@ -46,14 +53,8 @@
                         <input type="text" name="name" class="form-control" id="name" placeholder="协议名称" required autofocus="autofocus">
                     </div>
                     <div class="form-group">
-                        <label for="eqpName">所属设备</label>
-                        <select name="eqpName" class="form-control" id="eqpName">
-                            <#if equipments??>
-                                <#list equipments as equipment>
-                                <option value="${(equipment.name)!}">${(equipment.name)!}</option>
-                                </#list>
-                            </#if>
-                        </select>
+                        <label for="port">接入端口</label>
+                        <input type="number" name="port" class="form-control" id="port" placeholder="接入端口" required autofocus="autofocus">
                     </div>
                     <div class="form-group">
                         <label for="start_flag">起始标记</label>
@@ -65,7 +66,7 @@
                     </div>
                     <div class="form-group">
                         <label for="offsetType">位移类型</label>
-                        <select name="offsetType" class="form-control" id="offsetType">
+                        <select name="offsetType" class="form-control" id="offsetType" required>
                             <option value="分隔符">分隔符</option>
                             <option value="偏移量">偏移量</option>
                         </select>

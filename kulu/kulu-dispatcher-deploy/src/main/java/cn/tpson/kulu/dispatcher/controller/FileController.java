@@ -2,9 +2,14 @@ package cn.tpson.kulu.dispatcher.controller;
 
 import cn.tpson.kulu.common.dto.vo.ResultVO;
 import cn.tpson.kulu.common.util.ExcelUtils;
-import cn.tpson.kulu.dispatcher.biz.dto.*;
-import cn.tpson.kulu.dispatcher.biz.dto.query.ProtocalQUERY;
-import cn.tpson.kulu.dispatcher.biz.service.*;
+import cn.tpson.kulu.dispatcher.biz.dto.EquipmentDTO;
+import cn.tpson.kulu.dispatcher.biz.dto.GroupDTO;
+import cn.tpson.kulu.dispatcher.biz.dto.HashLoadBalanceDTO;
+import cn.tpson.kulu.dispatcher.biz.dto.ProtocalDTO;
+import cn.tpson.kulu.dispatcher.biz.service.EquipmentService;
+import cn.tpson.kulu.dispatcher.biz.service.GroupService;
+import cn.tpson.kulu.dispatcher.biz.service.HashLoadBalanceService;
+import cn.tpson.kulu.dispatcher.biz.service.ProtocalService;
 import cn.tpson.kulu.dispatcher.util.ProtocalUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,11 +41,7 @@ public class FileController {
     @Autowired
     private EquipmentService equipmentService;
     @Autowired
-    HashBackendService hashBackendService;
-    @Autowired
-    WeightBackendService weightBackendService;
-    @Autowired
-    RandomBackendService randomBackendService;
+    HashLoadBalanceService hashBackendService;
 
     @RequestMapping(value = "/template/{type}.do", method = RequestMethod.GET)
     public void template(@PathVariable String type, HttpServletResponse resp) {
@@ -108,80 +109,24 @@ public class FileController {
                     // watch,@G#@,@R#@,*,,5
                     String[] array = e;
                     if (array.length == 7) {
-                        EquipmentDTO equipment = equipmentService.findByName(array[6]);
-
-                        if (equipment != null) {
-                            ProtocalDTO protocal = new ProtocalDTO();
-                            protocal.setName(array[0]);
-                            protocal.setStartFlag(array[1]);
-                            protocal.setEndFlag(array[2]);
-                            protocal.setSplit("*".equals(array[3]) ? "," : array[3]);
-                            protocal.setOffset(NumberUtils.isDigits(array[4]) ? Integer.valueOf(array[4]) : null);
-                            protocal.setOffsetType(protocal.getOffset() != null ? ProtocalUtils.OFFSET_TYPE_OFFSET : ProtocalUtils.OFFSET_TYPE_SPLIT);
-                            protocal.setCount(NumberUtils.isDigits(array[5]) ? Integer.valueOf(array[5]) : 0);
-                            protocal.setEqpName(array[6]);
-                            protocal.setEquipment(equipment);
-                            protocals.add(protocal);
-                        }
+                        ProtocalDTO protocal = new ProtocalDTO();
+                        protocal.setName(array[0]);
+                        protocal.setStartFlag(array[1]);
+                        protocal.setEndFlag(array[2]);
+                        protocal.setSplit("*".equals(array[3]) ? "," : array[3]);
+                        protocal.setOffset(NumberUtils.isDigits(array[4]) ? Integer.valueOf(array[4]) : null);
+                        protocal.setOffsetType(protocal.getOffset() != null ? ProtocalUtils.OFFSET_TYPE_OFFSET : ProtocalUtils.OFFSET_TYPE_SPLIT);
+                        protocal.setCount(NumberUtils.isDigits(array[5]) ? Integer.valueOf(array[5]) : 0);
+                        protocal.setPort(Integer.valueOf(array[6]));
+                        protocals.add(protocal);
                     }
                 });
                 if (protocals.size() > 0) {
                     count = protocalService.saveAll(protocals);
                 }
                 break;
-            case "random":
-                List<RandomBackendDTO> randoms = new ArrayList<>();
-                rows.forEach(e -> {
-                    // 192.168.1.249,8809,watch,watch_group1
-                    String[] array = e;
-                    if (array.length == 4) {
-                        ProtocalDTO protocal = protocalService.findByName(array[2]);
-                        GroupDTO group = groupService.findByName(array[3]);
-
-                        if (protocal != null && group != null) {
-                            RandomBackendDTO b = new RandomBackendDTO();
-                            b.setIp(array[0]);
-                            b.setPort(NumberUtils.isDigits(array[1]) ? Integer.valueOf(array[1]) : 0);
-                            b.setProtocalName(array[2]);
-                            b.setGroupName(array[3]);
-                            b.setProtocal(protocal);
-                            b.setGroup(group);
-                            randoms.add(b);
-                        }
-                    }
-                });
-                if (randoms.size() > 0) {
-                    count = randomBackendService.saveAll(randoms);
-                }
-                break;
-            case "weight":
-                List<WeightBackendDTO> weights = new ArrayList<>();
-                rows.forEach(e -> {
-                    // 192.168.1.249,8809,2,watch,watch_group1
-                    String[] array = e;
-                    if (array.length == 5) {
-                        ProtocalDTO protocal = protocalService.findByName(array[3]);
-                        GroupDTO group = groupService.findByName(array[4]);
-
-                        if (protocal != null && group != null) {
-                            WeightBackendDTO b = new WeightBackendDTO();
-                            b.setIp(array[0]);
-                            b.setPort(NumberUtils.isDigits(array[1]) ? Integer.valueOf(array[1]) : 0);
-                            b.setWeight(NumberUtils.isDigits(array[2]) ? Integer.valueOf(array[2]) : 0);
-                            b.setProtocalName(array[3]);
-                            b.setGroupName(array[4]);
-                            b.setProtocal(protocal);
-                            b.setGroup(group);
-                            weights.add(b);
-                        }
-                    }
-                });
-                if (weights.size() > 0) {
-                    count = weightBackendService.saveAll(weights);
-                }
-                break;
             case "hash":
-                List<HashBackendDTO> hashs = new ArrayList<>();
+                List<HashLoadBalanceDTO> hashs = new ArrayList<>();
                 rows.forEach(e -> {
                     // 192.168.1.249,8809,1234567890123456,watch,watch_group1
                     String[] array = e;
@@ -190,14 +135,14 @@ public class FileController {
                         GroupDTO group = groupService.findByName(array[4]);
 
                         if (protocal != null && group != null) {
-                            HashBackendDTO b = new HashBackendDTO();
-                            b.setIp(array[0]);
+                            HashLoadBalanceDTO b = new HashLoadBalanceDTO();
+                            /*b.setIp(array[0]);
                             b.setPort(NumberUtils.isDigits(array[1]) ? Integer.valueOf(array[1]) : 0);
                             b.setKey(array[2]);
                             b.setProtocalName(array[3]);
                             b.setGroupName(array[4]);
                             b.setProtocal(protocal);
-                            b.setGroup(group);
+                            b.setGroup(group);*/
                             hashs.add(b);
                         }
                     }

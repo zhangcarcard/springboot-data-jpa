@@ -1,5 +1,5 @@
 (function () {
-    function init(url, columns) {
+    function init(url, columns, detailView, onExpandRow) {
         $('#table').bootstrapTable({
             url: url,                           //请求后台的URL（*）
             //method: method,                     //请求方式（*）
@@ -25,14 +25,16 @@
             uniqueId: "id",                     //每一行的唯一标识，一般为主键列
             showToggle:true,                    //是否显示详细视图和列表视图的切换按钮
             // cardView: false,                    //是否显示详细视图
-            // detailView: false,                  //是否显示父子表
-            columns: columns
+            detailView: detailView || false,                  //是否显示父子表
+            columns: columns,
+            onExpandRow: onExpandRow
         });
     }
 
     //可发送给服务端的参数：limit->pageSize,offset->pageNumber,search->searchText,sort->sortName(字段),order->sortOrder('asc'或'desc')
     function queryParams(params) {
         params.sortName = params.sort;
+        params.sort = null;
         return params;
         /*return {   //这里的键的名字和控制器的变量名必须一直，这边改动，控制器也需要改成一样的
             limit: params.limit,   //页面大小
@@ -41,8 +43,8 @@
         };*/
     }
     // 传'#table'
-    createBootstrapTable = function(table, url, columns) {
-        init(table, url, columns);
+    createBootstrapTable = function(url, columns, detailView, onExpandRow) {
+        init(url, columns, detailView, onExpandRow);
     }
 })();
 

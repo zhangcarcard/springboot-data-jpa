@@ -40,20 +40,10 @@ public class ProtocalDO extends BaseDO {
     @Column(nullable = false)
     private Integer count;
 
-    @ManyToOne
-    @JoinColumn(name = "eqp_id")
-    private EquipmentDO equipment;
+    /** 协议接入端口 */
+    @Column(nullable = false)
+    private Integer port;
 
-    /** 所属设备 */
-    private String eqpName;
-
-    public String getEqpName() {
-        return eqpName;
-    }
-
-    public void setEqpName(String eqpName) {
-        this.eqpName = eqpName;
-    }
 
     public String getName() {
         return name;
@@ -111,12 +101,12 @@ public class ProtocalDO extends BaseDO {
         this.count = count;
     }
 
-    public EquipmentDO getEquipment() {
-        return equipment;
+    public Integer getPort() {
+        return port;
     }
 
-    public void setEquipment(EquipmentDO equipment) {
-        this.equipment = equipment;
+    public void setPort(Integer port) {
+        this.port = port;
     }
 
     @Override
@@ -127,9 +117,9 @@ public class ProtocalDO extends BaseDO {
                 ", endFlag='" + endFlag + '\'' +
                 ", split='" + split + '\'' +
                 ", offset=" + offset +
-                ", offsetType=" + offsetType +
+                ", offsetType='" + offsetType + '\'' +
                 ", count=" + count +
-                ", equipment=" + equipment +
+                ", port=" + port +
                 "} " + super.toString();
     }
 }
