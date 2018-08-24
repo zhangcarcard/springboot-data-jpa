@@ -40,4 +40,29 @@ public class BackendServiceImpl extends BaseServiceImpl<BackendDTO, BackendDO> i
     public List<BackendDTO> findByGroupId(Long groupId) {
         return BeanUtils.newAndCopyPropertiesForList(BackendDTO.class, backendRepository.findByGroupId(groupId));
     }
+
+    @Override
+    public List<BackendDTO> findByEqpName(String eqpName) {
+        return BeanUtils.newAndCopyPropertiesForList(BackendDTO.class, backendRepository.findByEqpName(eqpName));
+    }
+
+    @Override
+    public int countByEqpNameAndGroupId(String eqpName, Long groupId) {
+        return backendRepository.countByEqpNameAndGroupId(eqpName, groupId);
+    }
+
+    @Override
+    public List<String> findAllEqpName() {
+        return backendRepository.findAllEqpName();
+    }
+
+    @Override
+    public List<String> findAllEqpNameByGroupId(Long groupId) {
+        return backendRepository.findAllEqpNameByGroupId(groupId);
+    }
+
+    @Override
+    public BackendDTO findByEqpNameAndGroupId(String eqpName, Long groupId) {
+        return BeanUtils.newAndCopyProperties(BackendDTO.class, backendRepository.findByEqpNameAndGroupId(eqpName, groupId));
+    }
 }

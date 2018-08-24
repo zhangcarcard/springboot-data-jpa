@@ -44,4 +44,14 @@ public class HashLoadBalanceServiceImpl extends BaseServiceImpl<HashLoadBalanceD
         GroupDO group = BeanUtils.newAndCopyProperties(GroupDO.class, groupDTO);
         return BeanUtils.newAndCopyPropertiesForList(HashLoadBalanceDTO.class, hashBackendRepository.findByGroup(group));
     }
+
+    @Override
+    public HashLoadBalanceDTO findByName(String name) {
+        return BeanUtils.newAndCopyProperties(HashLoadBalanceDTO.class, hashBackendRepository.findByName(name));
+    }
+
+    @Override
+    public int countByNameAndGroup(String name, GroupDO group) {
+        return hashBackendRepository.countByNameAndGroup(name, group);
+    }
 }

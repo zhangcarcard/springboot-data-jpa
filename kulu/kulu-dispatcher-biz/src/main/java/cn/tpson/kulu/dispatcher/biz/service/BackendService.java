@@ -1,6 +1,7 @@
 package cn.tpson.kulu.dispatcher.biz.service;
 
 import cn.tpson.kulu.common.jpa.service.local.BaseService;
+import cn.tpson.kulu.dispatcher.biz.domain.BackendDO;
 import cn.tpson.kulu.dispatcher.biz.dto.BackendDTO;
 
 import java.util.List;
@@ -10,4 +11,14 @@ import java.util.List;
  */
 public interface BackendService extends BaseService<BackendDTO> {
     List<BackendDTO> findByGroupId(Long groupId);
+
+    List<BackendDTO> findByEqpName(String eqpName);
+
+    BackendDTO findByEqpNameAndGroupId(String eqpName, Long groupId);
+
+    int countByEqpNameAndGroupId(String eqpName, Long groupId);
+
+    List<String> findAllEqpName();
+
+    List<String> findAllEqpNameByGroupId(Long groupId);
 }

@@ -20,4 +20,8 @@ public interface HashLoadBalanceRepository extends BaseRepository<HashLoadBalanc
     List<HashLoadBalanceDO> findByKey(String key);
 
     List<HashLoadBalanceDO> findByGroup(GroupDO group);
+
+    HashLoadBalanceDO findByName(String name);
+
+    int countByNameAndGroup(String name, GroupDO group);
 }

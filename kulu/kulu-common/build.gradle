@@ -25,5 +25,8 @@ dependencies {
     compile('commons-beanutils:commons-beanutils:1.9.3')
     compile('org.apache.poi:poi:3.17')
     compile('org.apache.poi:poi-ooxml:3.17')
+
+    compile 'org.xerial.snappy:snappy-java:1.1.7.2'
+    compile 'org.apache.commons:commons-compress:1.18'
 }
 

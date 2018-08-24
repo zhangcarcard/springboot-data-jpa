@@ -28,7 +28,7 @@ dependencies {
 //    compile project(':kulu-dispatcher-biz')
 
     compile("org.springframework.boot:spring-boot-starter-web:${springBootVersion}")
-    compile("org.springframework.boot:spring-boot-starter-data-redis:${springBootVersion}")
     compile("org.springframework.boot:spring-boot-starter-test:${springBootVersion}")
     compile 'io.netty:netty-all:4.1.22.Final'
+    compile 'org.apache.kafka:kafka_2.11:2.0.0'
 }

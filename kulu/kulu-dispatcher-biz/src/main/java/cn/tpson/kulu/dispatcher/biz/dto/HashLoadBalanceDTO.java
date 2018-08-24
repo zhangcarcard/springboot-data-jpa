@@ -8,7 +8,6 @@ import cn.tpson.kulu.dispatcher.biz.domain.HashLoadBalanceDO;
 public class HashLoadBalanceDTO extends HashLoadBalanceDO {
     private Long groupId;
 
-    private boolean active;
 
     public Long getGroupId() {
         return groupId;
@@ -16,13 +15,5 @@ public class HashLoadBalanceDTO extends HashLoadBalanceDO {
 
     public void setGroupId(Long groupId) {
         this.groupId = groupId;
-    }
-
-    public boolean isActive() {
-        return active;
-    }
-
-    public void setActive(boolean active) {
-        this.active = active;
     }
 }

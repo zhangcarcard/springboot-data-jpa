@@ -6,13 +6,12 @@ import cn.tpson.kulu.dispatcher.biz.service.HashLoadBalanceService;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.core.HashOperations;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.*;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
@@ -21,12 +20,8 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/statistics")
 public class StatisticsController {
-    public static final String DISPATCHER_CONNECTION_HASH = "DISPATCHER_CONNECTION_HASH";
-
     @Autowired
     private HashLoadBalanceService hashBackendService;
-    @Autowired
-    private RedisTemplate redisTemplate;
 
     /**
      *
@@ -34,14 +29,8 @@ public class StatisticsController {
      */
     @GetMapping("/connections.do")
     public ResultVO connections() {
-        HashOperations<String, String, Integer> hashOperations = redisTemplate.opsForHash();
-        Map<String, Integer> connectionMap = hashOperations.entries(DISPATCHER_CONNECTION_HASH);
         //设置连接状态
         List<HashLoadBalanceDTO> list = hashBackendService.findAll();
-        list.forEach(e -> {
-            Integer active = connectionMap.get(e.getKey());
-            e.setActive((active != null && active == 1) ? true :false);
-        });
 
         //分组
         Map<String, List<HashLoadBalanceDTO>> groupMap = list.stream().collect(Collectors.groupingBy(e -> e.getGroup().getName()));
@@ -55,23 +44,37 @@ public class StatisticsController {
             eqp.forEach((ek, ev) -> {
                 JSONArray keys = new JSONArray();
 //                ev.stream().map(HashBackendDO::getKey).collect(Collectors.toList());
-                ev.stream().forEach(dto -> {
-                    JSONObject key = new JSONObject();
-                    key.put("text", dto.getKey() + "(" + (dto.isActive() ? "在线)" : "离线)"));
-                    keys.add(key);
-                });
+                ev.stream()
+                        .filter(HashLoadBalanceDTO::getActive)
+                        .sorted((e1, e2) -> e1.getName().compareToIgnoreCase(e2.getName()))
+                        .forEach(dto -> {
+                            JSONObject key = new JSONObject();
+                            key.put("text", dto.getName());
+                            key.put("icon", "glyphicon glyphicon-ok-sign");
+                            keys.add(key);
+                        });
+
+                int activeTotal = keys.size();
+                ev.stream()
+                        .filter(e -> !e.getActive())
+                        .sorted((e1, e2) -> e1.getName().compareToIgnoreCase(e2.getName()))
+                        .forEach(dto -> {
+                            JSONObject key = new JSONObject();
+                            key.put("text", dto.getName());
+                            key.put("icon", "glyphicon glyphicon-remove-sign");
+                            keys.add(key);
+                        });
 
                 JSONObject e = new JSONObject();
-                Integer evTotal = ev.size();
-                long evActive = ev.stream().filter(HashLoadBalanceDTO::isActive).count();
-                e.put("text", ek + "(" + evActive + "/" + evTotal + ")");
+                Integer evTotal = keys.size();
+                e.put("text", ek + "(" + activeTotal + "/" + evTotal + ")");
                 e.put("nodes", keys);
                 eqps.add(e);
             });
 
             JSONObject group = new JSONObject();
             Integer vTotal = v.size();
-            long vActive = v.stream().filter(HashLoadBalanceDTO::isActive).count();
+            long vActive = v.stream().filter(HashLoadBalanceDTO::getActive).count();
             group.put("text", k + "(" + vActive + "/" + vTotal + ")");
             group.put("nodes", eqps);
             groups.add(group);

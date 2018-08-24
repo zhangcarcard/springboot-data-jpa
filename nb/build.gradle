@@ -1,0 +1,25 @@
+plugins {
+    id 'java'
+}
+
+group 'cn.tpson'
+version '1.0.0-SNAPSHOT'
+
+sourceCompatibility = 1.8
+
+repositories {
+    mavenLocal()
+    maven { url "http://192.168.0.5:1234/nexus/content/groups/public/" }
+    maven { url "http://maven.aliyun.com/nexus/content/groups/public/"}
+    mavenCentral()
+}
+
+dependencies {
+    compile 'com.huawei.m2m.iotplatform:api-client:1.0.0'
+//    compile 'org.apache.kafka:kafka_2.12:2.0.0'
+//    compile 'log4j:log4j:1.2.17'
+//    compile 'org.slf4j:slf4j-nop:1.7.25'
+//    compile 'org.slf4j:slf4j-simple:1.7.25'
+//    compile 'org.springframework.kafka:spring-kafka:2.1.8.RELEASE'
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+}

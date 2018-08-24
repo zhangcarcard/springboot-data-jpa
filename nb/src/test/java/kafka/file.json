@@ -1,0 +1,132 @@
+{
+  "services": [
+    {
+      "serviceType": "Login",
+      "description": "",
+      "commands": [],
+      "properties": [
+        {
+          "propertyName": "sflag",
+          "dataType": "int",
+          "required": true,
+          "min": "0",
+          "max": "65535",
+          "step": 0.0,
+          "maxLength": 0,
+          "method": "R",
+          "unit": null,
+          "enumList": null
+        },
+        {
+          "propertyName": "messageType",
+          "dataType": "int",
+          "required": true,
+          "min": "0",
+          "max": "255",
+          "step": 0.0,
+          "maxLength": 0,
+          "method": "R",
+          "unit": null,
+          "enumList": null
+        },
+        {
+          "propertyName": "dataFlag",
+          "dataType": "int",
+          "required": true,
+          "min": "0",
+          "max": "255",
+          "step": 0.0,
+          "maxLength": 0,
+          "method": "R",
+          "unit": null,
+          "enumList": null
+        },
+        {
+          "propertyName": "mflag",
+          "dataType": "int",
+          "required": true,
+          "min": "0",
+          "max": "255",
+          "step": 0.0,
+          "maxLength": 0,
+          "method": "R",
+          "unit": null,
+          "enumList": null
+        },
+        {
+          "propertyName": "msgId",
+          "dataType": "int",
+          "required": true,
+          "min": "0",
+          "max": "255",
+          "step": 0.0,
+          "maxLength": 0,
+          "method": "R",
+          "unit": null,
+          "enumList": null
+        },
+        {
+          "propertyName": "version",
+          "dataType": "int",
+          "required": true,
+          "min": "0",
+          "max": "255",
+          "step": 0.0,
+          "maxLength": 0,
+          "method": "R",
+          "unit": null,
+          "enumList": null
+        },
+        {
+          "propertyName": "length",
+          "dataType": "int",
+          "required": true,
+          "min": "0",
+          "max": "65535",
+          "step": 0.0,
+          "maxLength": 0,
+          "method": "R",
+          "unit": null,
+          "enumList": null
+        },
+        {
+          "propertyName": "serialId",
+          "dataType": "int",
+          "required": true,
+          "min": "0",
+          "max": "65535",
+          "step": 0.0,
+          "maxLength": 0,
+          "method": "R",
+          "unit": null,
+          "enumList": null
+        },
+        {
+          "propertyName": "crc",
+          "dataType": "int",
+          "required": true,
+          "min": "0",
+          "max": "65535",
+          "step": 0.0,
+          "maxLength": 0,
+          "method": "R",
+          "unit": null,
+          "enumList": null
+        },
+        {
+          "propertyName": "rawData",
+          "dataType": "string",
+          "required": true,
+          "min": "1",
+          "max": "2147483646",
+          "step": 0.0,
+          "maxLength": 42,
+          "method": "R",
+          "unit": "null",
+          "enumList": null
+        }
+      ],
+      "events": []
+    }
+  ]
+}

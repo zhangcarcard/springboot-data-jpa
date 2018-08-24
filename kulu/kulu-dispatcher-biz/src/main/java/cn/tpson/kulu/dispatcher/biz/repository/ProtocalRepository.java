@@ -17,4 +17,6 @@ public interface ProtocalRepository extends BaseRepository<ProtocalDO, Long> {
     Page<ProtocalDO> findByKeywordContaining(Pageable pageable, @Param("keyword")String keyword);
 
     ProtocalDO findByName(String name);
+
+    ProtocalDO findByPort(Integer port);
 }

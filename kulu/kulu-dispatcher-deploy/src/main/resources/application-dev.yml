@@ -1,3 +1,5 @@
+debug: false
+
 spring:
   datasource:
     url: jdbc:postgresql://192.168.1.251:5432/dispatcher
@@ -15,23 +17,11 @@ spring:
     hibernate:
       ddl-auto: update
 
-  redis:
-    database: 0
-    host: 192.168.1.251
-    port: 6379
-    password: kulu###2018
-    timeout: 60000ms
-    lettuce:
-      pool:
-        max-active: 100
-        max-wait: -1ms
-        max-idle: 8
-        min-idle: 8
-
-logging:
-  level:
-    cn.tpson.kulu: debug
-debug: false
-
-mq:
-  timeout: 30000
+#多个地址用逗号隔开
+kafka:
+  servers: 192.168.1.252:9092
+  topic:
+    hexmsg: dispatcher.server.hexmsg        #设备消息
+    active: dispatcher.server.active        #设备上下线状态
+  group:
+    hexmsg: dispatcher.server.hexmsg

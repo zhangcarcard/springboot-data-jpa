@@ -104,7 +104,7 @@
                             return index + 1;
                         }},
                     {title: '名称', field: 'name', sortable: true, valign: 'middle'},
-                    {title: '所属设备', field: 'eqpName', sortable: true, valign: 'middle'},
+                    {title: '接入端口', field: 'port', sortable: true, valign: 'middle'},
                     {title: '起始标记', field: 'startFlag', sortable: true, valign: 'middle'},
                     {title: '结束标记', field: 'endFlag', sortable: true, valign: 'middle'},
                     {title: '分隔符', field: 'split', sortable: true, valign: 'middle'},

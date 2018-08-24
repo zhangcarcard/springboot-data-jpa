@@ -1,12 +1,14 @@
 package cn.tpson.kulu.dispatcher.biz.domain;
 
 import cn.tpson.kulu.common.jpa.db.domain.BaseDO;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
+import java.util.Date;
 
 /**
  * Created by Zhangka in 2018/08/01
@@ -32,7 +34,11 @@ public class HashLoadBalanceDO extends BaseDO {
     @Column(length = 50, nullable = false)
     private String eqpName;
 
+    @Column(name = "is_active")
+    private Boolean active;
 
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+    private Date gmtLastActive;
 
     public String getName() {
         return name;
@@ -66,6 +72,22 @@ public class HashLoadBalanceDO extends BaseDO {
         this.eqpName = eqpName;
     }
 
+    public Boolean getActive() {
+        return active;
+    }
+
+    public void setActive(Boolean active) {
+        this.active = active;
+    }
+
+    public Date getGmtLastActive() {
+        return gmtLastActive;
+    }
+
+    public void setGmtLastActive(Date gmtLastActive) {
+        this.gmtLastActive = gmtLastActive;
+    }
+
     @Override
     public String toString() {
         return "HashLoadBalanceDO{" +
@@ -73,6 +95,8 @@ public class HashLoadBalanceDO extends BaseDO {
                 ", key='" + key + '\'' +
                 ", group=" + group +
                 ", eqpName='" + eqpName + '\'' +
-                '}';
+                ", active=" + active +
+                ", gmtLastActive=" + gmtLastActive +
+                "} " + super.toString();
     }
 }

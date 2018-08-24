@@ -35,23 +35,17 @@ public class ExampleLikeRangeSpecification<T> implements Specification<T> {
 
         if (example != null) {
             Predicate p = ExampleSpecification.of(example).toPredicate(root, query, builder);
-            if (p.getExpressions().size() > 0) {
-                list.add(p);
-            }
+            list.add(p);
         }
         if (ranges != null && !ranges.isEmpty()) {
             Range[] array = new Range[ranges.size()];
             ranges.toArray(array);
             Predicate p = RangeSpecification.of(array).toPredicate(root, query, builder);
-            if (p.getExpressions().size() > 0) {
-                list.add(p);
-            }
+            list.add(p);
         }
         if (like != null) {
             Predicate p = LikeSpecification.of(like).toPredicate(root, query, builder);
-            if (p.getExpressions().size() > 0) {
-                list.add(p);
-            }
+            list.add(p);
         }
 
         Predicate[] array = new Predicate[list.size()];

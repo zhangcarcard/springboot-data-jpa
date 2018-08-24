@@ -36,4 +36,9 @@ public class ProtocalServiceImpl extends BaseServiceImpl<ProtocalDTO, ProtocalDO
     public ProtocalDTO findByName(String name) {
         return BeanUtils.newAndCopyProperties(ProtocalDTO.class, protocalRepository.findByName(name));
     }
+
+    @Override
+    public ProtocalDTO findByPort(Integer port) {
+        return BeanUtils.newAndCopyProperties(ProtocalDTO.class, protocalRepository.findByPort(port));
+    }
 }

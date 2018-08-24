@@ -126,8 +126,7 @@
                     var groupId = row.id;
                     var cur_table = $detail.html('<table id="child_table"></table>').find('table');
                     $(cur_table).bootstrapTable({
-                        url: '/backend/backend.do',
-                        ajaxOptions: {groupId: groupId},
+                        url: '/backend/backend.do?groupId=' + groupId,
                         striped: true,
                         cache: false,
                         pagination: true,

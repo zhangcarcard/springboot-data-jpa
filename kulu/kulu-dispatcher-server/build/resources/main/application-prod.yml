@@ -17,17 +17,28 @@ kuluagent:
 agent:
   url: http://182.61.20.179:8081/protocal
 
-#redis
-spring:
-  redis:
-    database: 0
-    host: 182.61.20.179
-    port: 6379
-    password: kulu###2018
-    timeout: 60000ms
-    jedis:
-      pool:
-        max-active: 100
-        max-wait: -1ms
-        max-idle: 8
-        min-idle: 8
+#多个地址用逗号隔开
+kafka:
+  servers: localhost:9092
+  topic:
+    hexmsg: dispatcher.server.hexmsg        #设备消息
+    active: dispatcher.server.active        #设备上下线状态
+
+#============== kafka ===================
+# 指定kafka 代理地址，可以多个
+#spring:
+#  kafka:
+#    bootstrap-servers: 182.61.59.75:9092
+#    producer:
+#      retries: 0
+#      batch-size: 16384
+#      buffer-memory: 33554432
+#      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+#      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+#    consumer:
+#      group-id: test-consumer-group
+#      auto-offset-reset: earliest
+#      enable-auto-commit: true
+#      auto-commit-interval: 100ms
+#      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+#      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer

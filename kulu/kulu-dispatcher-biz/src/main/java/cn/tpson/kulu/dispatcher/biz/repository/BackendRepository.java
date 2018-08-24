@@ -19,4 +19,16 @@ public interface BackendRepository extends BaseRepository<BackendDO, Long> {
     Page<BackendDO> findByKeywordContaining(Pageable pageable, @Param("keyword")String keyword);
 
     List<BackendDO> findByGroupId(Long groupId);
+
+    List<BackendDO> findByEqpName(String eqpName);
+
+    BackendDO findByEqpNameAndGroupId(String eqpName, Long groupId);
+
+    int countByEqpNameAndGroupId(String eqpName, Long groupId);
+
+    @Query(value = "SELECT DISTINCT eqpName FROM Backend ORDER BY eqpName")
+    List<String> findAllEqpName();
+
+    @Query(value = "SELECT DISTINCT eqpName FROM Backend WHERE groupId = :groupId ORDER BY eqpName")
+    List<String> findAllEqpNameByGroupId(@Param("groupId") Long groupId);
 }

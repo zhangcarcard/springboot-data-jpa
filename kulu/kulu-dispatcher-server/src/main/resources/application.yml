@@ -2,9 +2,11 @@ logging:
   path: ${user.home}/logs/dispatcher
   file:
     max-size: 50MB
-server:
-  port: 8082
+  level:
+    root: info
 
 spring:
   profiles:
-    active: prod
+    active: dev
+
+debug: false

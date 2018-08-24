@@ -12,12 +12,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 /**
  * Created by Zhangka in 2018/08/01
@@ -34,7 +32,7 @@ public class BackendController {
 
     @ResponseBody
     @RequestMapping(value = "/backend.do", method = RequestMethod.GET)
-    public TableVO list(Integer offset, Integer limit, String search, String order, String sortName) {
+    public TableVO list(Long groupId, Integer offset, Integer limit, String search, String order, String sortName) {
         Sort sort = null;
         if (StringUtils.isNotBlank(order) && StringUtils.isNotBlank(sortName)) {
             sort = Sort.by(Sort.Direction.fromString(order.toUpperCase()), sortName);
@@ -42,6 +40,7 @@ public class BackendController {
         BackendQUERY query = new BackendQUERY();
         query.setPageNumber(offset / limit);
         query.setPageSize(limit);
+        query.setGroupId(groupId);
 //        Page<BackendDTO> page = backendService.pageByKeywordContaining(offset / limit, limit, sort, search);
         Page<BackendDTO> page = backendService.pageByExample(query, sort);
 
@@ -51,6 +50,21 @@ public class BackendController {
     @ResponseBody
     @RequestMapping(value = "/backend.do", method = RequestMethod.POST)
     public ResultVO hash(BackendDTO backend) {
+        if (StringUtils.isBlank(backend.getEqpName())) {
+            return ResultVO.failResult("名称不能为空.");
+        }
+
+        int total = backendService.countByEqpNameAndGroupId(backend.getEqpName(), backend.getGroupId());
+        if (backend.getId() == null) {
+            if (total > 0) {
+                return ResultVO.failResult("设备型号【" + backend.getEqpName() + "】在改分组下已存在.");
+            }
+        } else {
+            if (total > 1) {
+                return ResultVO.failResult("设备型号【" + backend.getEqpName() + "】在改分组下已存在.");
+            }
+        }
+
         return backendService.save(backend) > 0
                 ? ResultVO.successResult()
                 : ResultVO.failResult("添加失败.");
@@ -61,5 +75,13 @@ public class BackendController {
     public ResultVO hash(@RequestBody ArrayList<BackendDTO> backends) {
         backendService.deleteAllEntity(backends);
         return ResultVO.successResult();
+    }
+
+    @ResponseBody
+    @GetMapping("/eqpNames.do")
+    public ResultVO eqpNames(Long groupId) {
+        return groupId == null
+                ? ResultVO.failResult("参数错误.")
+                : ResultVO.successResult(backendService.findAllEqpNameByGroupId(groupId));
     }
 }

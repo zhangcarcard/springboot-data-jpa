@@ -10,4 +10,6 @@ import java.util.List;
  */
 public interface ProtocalService extends BaseService<ProtocalDTO> {
     ProtocalDTO findByName(String name);
+
+    ProtocalDTO findByPort(Integer port);
 }

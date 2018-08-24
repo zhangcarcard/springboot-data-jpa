@@ -51,11 +51,12 @@ public class GroupController {
     @RequestMapping(value = "/group.do", method = RequestMethod.POST)
     public ResultVO save(GroupDTO group) {
         if (group.getId() == null && StringUtils.isNotBlank(group.getName())) {
-            GroupDTO dto = groupService.findByName(group.getName());
-            if (dto != null) {
-                return ResultVO.failResult("名称不能重复.");
+            GroupDTO g = groupService.findByName(group.getName());
+            if (g != null) {
+                return ResultVO.failResult("名称【" + group.getName() + "】已存在.");
             }
         }
+
         return groupService.save(group) > 0
                 ? ResultVO.successResult()
                 : ResultVO.failResult("保存失败.");

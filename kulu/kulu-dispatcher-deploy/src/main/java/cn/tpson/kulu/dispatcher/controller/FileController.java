@@ -2,11 +2,11 @@ package cn.tpson.kulu.dispatcher.controller;
 
 import cn.tpson.kulu.common.dto.vo.ResultVO;
 import cn.tpson.kulu.common.util.ExcelUtils;
-import cn.tpson.kulu.dispatcher.biz.dto.EquipmentDTO;
+import cn.tpson.kulu.dispatcher.biz.dto.BackendDTO;
 import cn.tpson.kulu.dispatcher.biz.dto.GroupDTO;
 import cn.tpson.kulu.dispatcher.biz.dto.HashLoadBalanceDTO;
 import cn.tpson.kulu.dispatcher.biz.dto.ProtocalDTO;
-import cn.tpson.kulu.dispatcher.biz.service.EquipmentService;
+import cn.tpson.kulu.dispatcher.biz.service.BackendService;
 import cn.tpson.kulu.dispatcher.biz.service.GroupService;
 import cn.tpson.kulu.dispatcher.biz.service.HashLoadBalanceService;
 import cn.tpson.kulu.dispatcher.biz.service.ProtocalService;
@@ -26,7 +26,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URLEncoder;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by Zhangka in 2018/04/20
@@ -39,34 +41,22 @@ public class FileController {
     @Autowired
     GroupService groupService;
     @Autowired
-    private EquipmentService equipmentService;
+    private BackendService backendService;
     @Autowired
-    HashLoadBalanceService hashBackendService;
+    HashLoadBalanceService hashLoadBalanceService;
 
     @RequestMapping(value = "/template/{type}.do", method = RequestMethod.GET)
     public void template(@PathVariable String type, HttpServletResponse resp) {
         try {
             switch (type) {
                 case "protocal":
-                    String[] p = {"名称", "起始标记", "结束标记", "分隔符(逗号用*代替)", "偏移量(分隔符和偏移量都填写，优先使用分隔符)", "长度", "设备名称"};
+                    String[] p = {"名称", "接入端口", "起始标记", "结束标记", "分隔符(逗号用*代替)", "偏移量(分隔符和偏移量都填写，优先使用分隔符)", "长度"};
                     List<String[]> ps = new ArrayList<>(1);
                     ps.add(p);
                     writeTemplate("protocal.xlsx", "协议配置", ps, resp);
                     break;
-                case "random":
-                    String[] r = {"IP", "PORT", "协议名称", "分组名称"};
-                    List<String[]> rs = new ArrayList<>(1);
-                    rs.add(r);
-                    writeTemplate("random.xlsx", "随机路由配置", rs, resp);
-                    break;
-                case "weight":
-                    String[] w = {"IP", "PORT", "权重", "协议名称", "分组名称"};
-                    List<String[]> ws = new ArrayList<>(1);
-                    ws.add(w);
-                    writeTemplate("weight.xlsx", "权重路由配置", ws, resp);
-                    break;
                 case "hash":
-                    String[] h = {"IP", "PORT", "KEY", "协议名称", "分组名称"};
+                    String[] h = {"名称", "KEY", "分组名称", "设备型号"};
                     List<String[]> hs = new ArrayList<>(1);
                     hs.add(h);
                     writeTemplate("hash.xlsx", "HASH路由配置", hs, resp);
@@ -90,14 +80,14 @@ public class FileController {
                 List<String[]> rows = ExcelUtils.read(in, xlsx);
                 if (rows.size() > 0) {
                     Long count = readTemplate(type, rows.subList(1, rows.size()));
-                    return count != null && count > 0 ? ResultVO.successResult() : ResultVO.failResult("上传失败.");
+                    return count > 0 ? ResultVO.successResult() : ResultVO.failResult("没有记录被导入.");
                 }
             } catch (IOException e) {
                 throw new RuntimeException("无法导入文件.");
             }
         }
 
-        return ResultVO.failResult("上传失败.");
+        return ResultVO.failResult("没有记录被导入.");
     }
 
     public Long readTemplate(String type, List<String[]> rows) {
@@ -108,16 +98,16 @@ public class FileController {
                 rows.forEach(e -> {
                     // watch,@G#@,@R#@,*,,5
                     String[] array = e;
-                    if (array.length == 7) {
+                    if (array.length == 7 && protocalService.findByName(array[0]) == null) {
                         ProtocalDTO protocal = new ProtocalDTO();
                         protocal.setName(array[0]);
-                        protocal.setStartFlag(array[1]);
-                        protocal.setEndFlag(array[2]);
-                        protocal.setSplit("*".equals(array[3]) ? "," : array[3]);
-                        protocal.setOffset(NumberUtils.isDigits(array[4]) ? Integer.valueOf(array[4]) : null);
+                        protocal.setPort(Integer.valueOf(array[1]));
+                        protocal.setStartFlag(array[2]);
+                        protocal.setEndFlag(array[3]);
+                        protocal.setSplit("*".equals(array[4]) ? "," : array[4]);
+                        protocal.setOffset(NumberUtils.isDigits(array[5]) ? Integer.valueOf(array[5]) : null);
                         protocal.setOffsetType(protocal.getOffset() != null ? ProtocalUtils.OFFSET_TYPE_OFFSET : ProtocalUtils.OFFSET_TYPE_SPLIT);
-                        protocal.setCount(NumberUtils.isDigits(array[5]) ? Integer.valueOf(array[5]) : 0);
-                        protocal.setPort(Integer.valueOf(array[6]));
+                        protocal.setCount(NumberUtils.isDigits(array[6]) ? Integer.valueOf(array[6]) : 0);
                         protocals.add(protocal);
                     }
                 });
@@ -126,29 +116,33 @@ public class FileController {
                 }
                 break;
             case "hash":
-                List<HashLoadBalanceDTO> hashs = new ArrayList<>();
-                rows.forEach(e -> {
-                    // 192.168.1.249,8809,1234567890123456,watch,watch_group1
+                Map<String, HashLoadBalanceDTO> hashs = new HashMap<>();
+                for (String[] e : rows) {
+                    // name,1234567890123456,分组名称,设备名称
                     String[] array = e;
-                    if (array.length == 5) {
-                        ProtocalDTO protocal = protocalService.findByName(array[3]);
-                        GroupDTO group = groupService.findByName(array[4]);
+                    if (array.length == 4) {
+                        GroupDTO group = groupService.findByName(array[2]);
+                        if (group == null)
+                            continue;
 
-                        if (protocal != null && group != null) {
+                        BackendDTO backend = backendService.findByEqpNameAndGroupId(array[3], group.getId());
+                        if (backend == null)
+                            continue;
+
+                        int total = hashLoadBalanceService.countByNameAndGroup(array[0], group);
+                        if (total == 0) {
                             HashLoadBalanceDTO b = new HashLoadBalanceDTO();
-                            /*b.setIp(array[0]);
-                            b.setPort(NumberUtils.isDigits(array[1]) ? Integer.valueOf(array[1]) : 0);
-                            b.setKey(array[2]);
-                            b.setProtocalName(array[3]);
-                            b.setGroupName(array[4]);
-                            b.setProtocal(protocal);
-                            b.setGroup(group);*/
-                            hashs.add(b);
+                            b.setName(array[0]);
+                            b.setKey(array[1]);
+                            b.setGroup(group);
+                            b.setEqpName(array[3]);
+                            hashs.put(array[0], b);
                         }
                     }
-                });
+                }
+
                 if (hashs.size() > 0) {
-                    count = hashBackendService.saveAll(hashs);
+                    count = hashLoadBalanceService.saveAll(hashs.values());
                 }
                 break;
             default:

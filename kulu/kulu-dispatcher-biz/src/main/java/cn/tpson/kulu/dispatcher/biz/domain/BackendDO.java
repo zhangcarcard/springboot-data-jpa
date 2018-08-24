@@ -21,8 +21,8 @@ import javax.persistence.*;
 @DynamicInsert
 @DynamicUpdate
 public class BackendDO extends BaseDO {
-    /** ip地址 */
-    @Column(length = 19, nullable = false)
+    /** ip或者域名地址 */
+    @Column(length = 50, nullable = false)
     private String ip;
 
     /** port */

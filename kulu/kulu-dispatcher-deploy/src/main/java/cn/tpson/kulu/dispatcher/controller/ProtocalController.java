@@ -79,11 +79,24 @@ public class ProtocalController {
     @ResponseBody
     @RequestMapping(value = "/protocal.do", method = RequestMethod.POST)
     public ResultVO save(ProtocalDTO protocal) {
-        if (protocal.getId() == null && StringUtils.isNotBlank(protocal.getName())) {
-            if (protocalService.findByName(protocal.getName()) != null) {
-                return ResultVO.failResult("名称不能重复.");
+        if (protocal.getId() == null) {
+            if (StringUtils.isNotBlank(protocal.getName())) {
+                ProtocalDTO p = protocalService.findByName(protocal.getName());
+                if (p != null) {
+                    return ResultVO.failResult("名称【" + protocal.getName() + "】已存在.");
+                }
+            }
+
+            if (protocal.getPort() != null) {
+                ProtocalDTO p = protocalService.findByPort(protocal.getPort());
+                if (p != null) {
+                    return ResultVO.failResult("端口【" + p.getPort() + "】下已存在协议【" + p.getName() + "】");
+                }
             }
         }
+
+
+
         return protocalService.save(protocal) > 0
                 ? ResultVO.successResult()
                 : ResultVO.failResult("添加失败.");

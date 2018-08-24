@@ -105,7 +105,7 @@ public class ProtocalUtils {
             return false;
         if (msg == null || msg.length <= startFlag.length + endFlag.length)
             return false;
-        if (msg.length < offset)
+        if (offset != null && msg.length < offset)
             return false;
 
         return true;

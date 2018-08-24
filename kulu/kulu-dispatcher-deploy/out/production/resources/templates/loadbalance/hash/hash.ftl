@@ -70,8 +70,14 @@
                         </select>
                     </div>
                     <div class="form-group">
-                        <label for="eqpName">设备类型</label>
-                        <input type="text" name="eqpName" class="form-control" id="eqpName" placeholder="设备类型" required>
+                        <label for="eqpName">设备型号</label>
+                        <select name="eqpName" class="form-control" id="eqpName" required>
+                            <!--<#if eqpNames??>
+                                <#list eqpNames as eqpName>
+                                <option value="${(eqpName)!}">${(eqpName)!}</option>
+                                </#list>
+                            </#if>-->
+                        </select>
                     </div>
 
                     <div class="modal-footer">
@@ -98,9 +104,8 @@
                     {title: '分组名称', field: 'groupName', sortable: true, valign: 'middle', formatter: function (value, row, index) {
                             return row.group == undefined ? null : row.group.name;
                     }},
-                    {title: '设备名称', field: 'eqpName', sortable: true, valign: 'middle'},
-                    {title: '创建时间', field: 'gmtCreate', sortable: true, valign: 'middle'},
-                    {title: '修改时间', field: 'gmtModified', sortable: true, valign: 'middle'},
+                    {title: '设备型号', field: 'eqpName', sortable: true, valign: 'middle'},
+                    {title: '最后上线时间', field: 'gmtCreate', sortable: true, valign: 'middle'},
                     {title: '操作', valign: 'middle', events: operateEvents,
                         formatter: function(value, row, index) {
                             return [
@@ -123,6 +128,9 @@
         });
         $("#btn_add").click(function() {
             formClear('#form');
+            if ($('#groupId').val() != undefined) {
+                $('#groupId').change();
+            }
             $("#addModalLabel").text("新增");
             $('#addModal').modal();
         });
@@ -175,6 +183,24 @@
             }, "json");
             return false;
         });
+
+        $('#groupId').change(function() {
+            var params = {groupId: $('#groupId').val()};
+            $.get("/backend/eqpNames.do", params, function(result) {
+                if (result.success) {
+                    var options = [];
+                    $.each(result.data, function (i, item) {
+                        var option = $('<option></option>');
+                        option.attr('value', item);
+                        option.text(item);
+                        options.push(option);
+                    });
+                    $('#eqpName').html(options);
+                } else {
+                    toastr.error(result.message);
+                }
+            }, "json");
+        });
     });
 
     window.operateEvents = {
@@ -183,6 +209,9 @@
             for (var v in row) {
                 if (v == 'groupId' && row.group != undefined) {
                     $('#groupId').val(row.group.id);
+                    $('#groupId').change();
+                } else if (v == 'eqpName') {
+                    $('#eqpName').val(row[v]);
                 } else {
                     $('#' + v).val(row[v]);
                 }

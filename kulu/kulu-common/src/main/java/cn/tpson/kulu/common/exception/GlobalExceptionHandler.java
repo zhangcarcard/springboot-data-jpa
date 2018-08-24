@@ -47,6 +47,8 @@ class GlobalExceptionHandler {
             message = "无权操作";
         } else if (e instanceof ParamRuntimeException) {
             message = e.getMessage();
+        } else if (e instanceof IllegalArgumentException) {
+            return e.getMessage();
         }
 
         log.error("捕获异常", e);
