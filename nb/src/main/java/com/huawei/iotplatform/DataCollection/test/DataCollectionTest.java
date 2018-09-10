@@ -41,17 +41,18 @@ public class DataCollectionTest {
 
         aod = aaa.getAuthToken();
         String accessToken = aod.getAccessToken();
-        String deviceId = "f8801e7c-65a7-4da7-90e4-44b2555a0039";
+//        String deviceId = "f8801e7c-65a7-4da7-90e4-44b2555a0039";
 
         // 4.3.1 按条件批量查询设备信息列表
         QueryDevicesInDTO qdido = new QueryDevicesInDTO();
-        String gatewayId = deviceId;
-        qdido.setGatewayId(gatewayId);
+//        String gatewayId = deviceId;
+//        qdido.setGatewayId(gatewayId);
+        qdido.setPageNo(0);
         QueryDevicesOutDTO qdodo = dc.queryDevices(qdido, appId, accessToken);
         System.out.println(qdodo.toString());
 
         // 4.3.2 查询单个设备信息
-        QueryDeviceDataOutDTO qddodto = dc.queryDeviceData(deviceId, appId, accessToken);
+        /*QueryDeviceDataOutDTO qddodto = dc.queryDeviceData(deviceId, appId, accessToken);
         System.out.println(qddodto.toString());
 
         // 4.3.3 查询设备历史数据
@@ -68,16 +69,16 @@ public class DataCollectionTest {
         qdcid.setDeviceId(deviceId);
         QueryDeviceCapabilitiesOutDTO qdcod = dc.queryDeviceCapabilities(qdcid, appId, accessToken);
         System.out.println(qdcod.toString());
-
+*/
         // 4.3.5 订阅平台数据
-        /*SubscribeInDTO sid = new SubscribeInDTO();
+        SubscribeInDTO sid = new SubscribeInDTO();
         String notifyType = "deviceAdded";
         String callbackurl = "http://172.31.126.82:8080/RESTfulWS/rest/UserInfoService/subscriber1";
         sid.setNotifyType(notifyType);
         sid.setCallbackurl(callbackurl);
 
         dc.subscribeNotify(sid, accessToken);
-*/
+
         // 4.1.3 注销鉴权Token,无返回值
         aaa.logoutAuthToken(accessToken);
     }

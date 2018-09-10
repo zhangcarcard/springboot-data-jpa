@@ -1,11 +1,11 @@
 package cn.tpson.kulu.dispatcher.server.netty.server;
 
+import cn.tpson.kulu.common.ds.ByteArray;
 import cn.tpson.kulu.common.logger.Logger;
 import cn.tpson.kulu.common.logger.LoggerFactory;
 import cn.tpson.kulu.dispatcher.server.netty.client.KuluAgent;
 import cn.tpson.kulu.dispatcher.server.service.RemoteBackendService;
 import cn.tpson.kulu.dispatcher.server.vo.BackendVO;
-import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
@@ -46,14 +46,17 @@ public abstract class ServerHandler extends ChannelInboundHandlerAdapter {
     @Value("${kafka.topic.active}")
     private String topicActive;
 
-    public abstract String decode(String key);
+    public abstract String decodeKey(String key);
 
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) {
-        byte[] content = (byte[])msg;
-        String hexMsg = toHexString(content);
-        Channel platform = ctx.channel().attr(P).get();
+        ByteBuf in = (ByteBuf)msg;
+        byte[] array = new byte[in.readableBytes()];
+        in.getBytes(0, array);
+        String hexMsg = toHexString(array);
 
+        log.info("content hex:{}", hexMsg);
+        Channel platform = ctx.channel().attr(P).get();
         // 已连接，直接转发
         if (platform != null) {
             boolean autoRead = platform.isWritable() ? true : false;
@@ -70,8 +73,8 @@ public abstract class ServerHandler extends ChannelInboundHandlerAdapter {
             return;
         }
 
-        key = decode(key);
-        log.info("hash-key:{}", key);
+        key = decodeKey(key);
+        log.info("{}:hash-key:{}", Thread.currentThread().getId(), key);
         BackendVO backend = remoteBackendService.getBackend(getServerPort(), key);
         log.info(backend == null ? "Dispatcher-" + getServerPort() + "找不到路由服务器." : backend.toString());
         if (backend == null) {
@@ -119,11 +122,11 @@ public abstract class ServerHandler extends ChannelInboundHandlerAdapter {
         String key = eqp.attr(K).get();
         logIsActive(key, false);
         if (eqp != null && eqp.isActive()) {
-            log.info("eqp.close():{},key:{}", eqp, key);
+            log.info("{}:eqp.close():{},key:{}", Thread.currentThread().getId(), eqp, key);
             eqp.close();
         }
         if (platform != null && platform.isActive()) {
-            log.info("platform.close():{},key:{}", platform, key);
+            log.info("{}:platform.close():{},key:{}", Thread.currentThread().getId(), platform, key);
             platform.close();
         }
     }
@@ -144,13 +147,13 @@ public abstract class ServerHandler extends ChannelInboundHandlerAdapter {
 
     protected void logIsActive(String key, boolean isActive) {
         if (StringUtils.isNotBlank(key)) {
-            log.info("key:{}, isActive:{}", key, isActive);
+            log.info("{}:key:{}, isActive:{}", Thread.currentThread().getId(), key, isActive);
             producer.send(new ProducerRecord<>(topicActive, key, Boolean.toString(isActive)));
         }
     }
 
     protected void logHexMsg(String key, String hexMsg) {
-        log.info("key:{}, content hex:{}", key, hexMsg);
+        log.info("{}:key:{}, content hex:{}", Thread.currentThread().getId(), key, hexMsg);
         //心跳消息不记录.
         if (StringUtils.isNotBlank(key) && StringUtils.isNotBlank(hexMsg) && !hexMsg.startsWith("7E0002")) {
             JSONObject msg = new JSONObject();

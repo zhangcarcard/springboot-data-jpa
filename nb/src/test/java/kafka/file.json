@@ -1,132 +1,23 @@
 {
-  "services": [
-    {
-      "serviceType": "Login",
-      "description": "",
-      "commands": [],
-      "properties": [
-        {
-          "propertyName": "sflag",
-          "dataType": "int",
-          "required": true,
-          "min": "0",
-          "max": "65535",
-          "step": 0.0,
-          "maxLength": 0,
-          "method": "R",
-          "unit": null,
-          "enumList": null
-        },
-        {
-          "propertyName": "messageType",
-          "dataType": "int",
-          "required": true,
-          "min": "0",
-          "max": "255",
-          "step": 0.0,
-          "maxLength": 0,
-          "method": "R",
-          "unit": null,
-          "enumList": null
-        },
-        {
-          "propertyName": "dataFlag",
-          "dataType": "int",
-          "required": true,
-          "min": "0",
-          "max": "255",
-          "step": 0.0,
-          "maxLength": 0,
-          "method": "R",
-          "unit": null,
-          "enumList": null
-        },
-        {
-          "propertyName": "mflag",
-          "dataType": "int",
-          "required": true,
-          "min": "0",
-          "max": "255",
-          "step": 0.0,
-          "maxLength": 0,
-          "method": "R",
-          "unit": null,
-          "enumList": null
-        },
-        {
-          "propertyName": "msgId",
-          "dataType": "int",
-          "required": true,
-          "min": "0",
-          "max": "255",
-          "step": 0.0,
-          "maxLength": 0,
-          "method": "R",
-          "unit": null,
-          "enumList": null
-        },
-        {
-          "propertyName": "version",
-          "dataType": "int",
-          "required": true,
-          "min": "0",
-          "max": "255",
-          "step": 0.0,
-          "maxLength": 0,
-          "method": "R",
-          "unit": null,
-          "enumList": null
-        },
-        {
-          "propertyName": "length",
-          "dataType": "int",
-          "required": true,
-          "min": "0",
-          "max": "65535",
-          "step": 0.0,
-          "maxLength": 0,
-          "method": "R",
-          "unit": null,
-          "enumList": null
-        },
-        {
-          "propertyName": "serialId",
-          "dataType": "int",
-          "required": true,
-          "min": "0",
-          "max": "65535",
-          "step": 0.0,
-          "maxLength": 0,
-          "method": "R",
-          "unit": null,
-          "enumList": null
-        },
-        {
-          "propertyName": "crc",
-          "dataType": "int",
-          "required": true,
-          "min": "0",
-          "max": "65535",
-          "step": 0.0,
-          "maxLength": 0,
-          "method": "R",
-          "unit": null,
-          "enumList": null
-        },
-        {
-          "propertyName": "rawData",
-          "dataType": "string",
-          "required": true,
-          "min": "1",
-          "max": "2147483646",
-          "step": 0.0,
-          "maxLength": 42,
-          "method": "R",
-          "unit": "null",
-          "enumList": null
-        }
-      ],
-      "events": []
-    }
-  ]
+  "notifyType": "deviceDataChanged",
+  "deviceId": "fc492fac-0c84-45ea-899f-75c33188bd5e",
+  "gatewayId": "fc492fac-0c84-45ea-899f-75c33188bd5e",
+  "requestId": null,
+  "service": {
+    "serviceId": "Login",
+    "serviceType": "Login",
+    "data": {
+      "sflag": "qnI=",
+      "messageType": 0,
+      "dataFlag": 0,
+      "mflag": 127,
+      "msgId": 1,
+      "version": 1,
+      "length": "KgA=",
+      "serialId": "AgA=",
+      "crc": "oZ8=",
+      "rawData": "QkYwMQAAAABWMS4wVjEuNDg2MzcwMzAzMzM3NjYzOAA0NjAxMQAAAAcA"
+    },
+    "eventTime": "20180827T064731Z"
+  }
 }

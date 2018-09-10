@@ -8,6 +8,8 @@ import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
+import io.netty.handler.codec.bytes.ByteArrayDecoder;
+import io.netty.handler.codec.bytes.ByteArrayEncoder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -43,8 +45,8 @@ public class KuluAgent {
             @Override
             public void initChannel(SocketChannel ch) throws Exception {
                 ch.pipeline()
-//                        .addLast("decoder", new KuluWatchDecoder())
-//                        .addLast("encoder", new KuluWatchEncoder())
+//                        .addLast("decoder", new ByteArrayDecoder())
+//                        .addLast("encoder", new ByteArrayEncoder())
                         .addLast(kuluAgentHandler);
             }
         });

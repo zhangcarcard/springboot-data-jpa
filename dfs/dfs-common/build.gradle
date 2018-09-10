@@ -1,0 +1,17 @@
+buildscript {
+    repositories {
+        mavenLocal()
+        maven { url "http://192.168.0.5:1234/nexus/content/groups/public/" }
+        maven { url "http://maven.aliyun.com/nexus/content/groups/public/"}
+        mavenCentral()
+    }
+}
+
+//apply plugin: 'org.springframework.boot'
+//apply plugin: 'io.spring.dependency-management'
+version = '1.0.0'
+
+dependencies {
+
+}
+

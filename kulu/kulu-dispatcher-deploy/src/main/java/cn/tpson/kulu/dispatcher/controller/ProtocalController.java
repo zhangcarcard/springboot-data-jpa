@@ -3,6 +3,8 @@ package cn.tpson.kulu.dispatcher.controller;
 import cn.tpson.kulu.common.constant.ErrorCodeEnum;
 import cn.tpson.kulu.common.dto.vo.ResultVO;
 import cn.tpson.kulu.common.dto.vo.TableVO;
+import cn.tpson.kulu.common.logger.Logger;
+import cn.tpson.kulu.common.logger.LoggerFactory;
 import cn.tpson.kulu.dispatcher.biz.dto.*;
 import cn.tpson.kulu.dispatcher.biz.dto.query.ProtocalQUERY;
 import cn.tpson.kulu.dispatcher.biz.service.BackendService;
@@ -33,6 +35,8 @@ import java.util.Objects;
 @Controller
 @RequestMapping("/protocal")
 public class ProtocalController {
+    private static final Logger log = LoggerFactory.getLogger(ProtocalController.class);
+
     @Autowired
     private ProtocalService protocalService;
     @Autowired
@@ -121,8 +125,10 @@ public class ProtocalController {
      * @return
      */
     @ResponseBody
-    @RequestMapping(value = "/key.do", method = RequestMethod.GET)
+    @RequestMapping(value = "/key.do", method = RequestMethod.GET, produces="application/json")
     public ResultVO key(Integer serverPort, String hexMsg) {
+        log.info("serverPort:{},hexMsg:{}", serverPort, hexMsg);
+
         if (serverPort == null || StringUtils.isBlank(hexMsg)) {
             return ResultVO.failResult(ErrorCodeEnum.RESULT_NOT_FOUND);
         }
@@ -137,6 +143,7 @@ public class ProtocalController {
         byte[] msg = DatatypeConverter.parseHexBinary(hexMsg);
         String key = ProtocalUtils.getKey(protocals.get(0), msg);
 
+        log.info("key.key:{}", key);
         return StringUtils.isBlank(key)
                 ? ResultVO.failResult(ErrorCodeEnum.RESULT_NOT_FOUND)
                 : ResultVO.successResult(key);
@@ -150,6 +157,7 @@ public class ProtocalController {
     @ResponseBody
     @RequestMapping(value = "/backend.do", method = RequestMethod.GET)
     public ResultVO backend(String key) {
+        log.info("backend.key:{}", key);
         if (StringUtils.isBlank(key)) {
             return ResultVO.failResult(ErrorCodeEnum.RESULT_NOT_FOUND);
         }

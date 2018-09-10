@@ -60,7 +60,7 @@
   <body>
 
     <div class="container">
-      <form class="form-signin" action="/login.do" method="post">
+      <form class="form-signin" action="/user/login.do" method="post">
           <h2 class="form-signin-heading">请登录</h2>
           <label for="inputEmail" class="sr-only">Email address</label>
           <input type="text" name="username" id="username" class="form-control" placeholder="用户名" required autofocus>

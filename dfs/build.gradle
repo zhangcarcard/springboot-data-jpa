@@ -1,0 +1,82 @@
+buildscript {
+    repositories {
+        mavenLocal()
+        maven { url "http://192.168.0.5:1234/nexus/content/groups/public/" }
+        maven { url "http://maven.aliyun.com/nexus/content/groups/public/"}
+        mavenCentral()
+    }
+}
+
+allprojects {
+    apply plugin: 'maven'
+    apply plugin: 'java'
+    apply plugin: 'idea'
+    apply plugin: 'eclipse'
+    test {
+        ignoreFailures = true
+    }
+
+    group = 'cn.tpson.dfs'
+    version = '1.0.0-SNAPSHOT'
+
+}
+
+// 所有子项目的通用配置
+subprojects {
+    apply plugin: 'java'
+    apply plugin: 'eclipse'
+    apply plugin: 'idea'
+
+    // JVM 版本号要求
+    sourceCompatibility = 1.8
+    targetCompatibility = 1.8
+ 
+    // java编译的时候缺省状态下会因为中文字符而失败
+    [compileJava,compileTestJava,javadoc]*.options*.encoding = 'UTF-8'
+
+    repositories {
+		mavenLocal()
+		maven { url "http://192.168.0.5:1234/nexus/content/groups/public/" }
+        maven { url "http://maven.aliyun.com/nexus/content/groups/public/"}
+        mavenCentral()
+		jcenter()
+    }
+ 
+    dependencies {
+        compile 'org.xerial.snappy:snappy-java:1.1.7.2'
+        compile 'com.esotericsoftware.kryo:kryo:2.24.0'
+        compile 'junit:junit:4.12'
+        compile 'log4j:log4j:1.2.17'
+        compile 'org.slf4j:slf4j-simple:1.7.25'
+        compile 'org.apache.commons:commons-lang3:3.8'
+        /*compile(
+        )
+ 
+        testCompile(
+        )*/
+    }
+
+    jar {
+        manifest {
+            attributes("Implementation-Title": "Gradle")
+        }
+    }
+ 
+    configurations {
+        // 所有需要忽略的包定义在此
+        //all*.exclude group: 'commons-httpclient'
+        //all*.exclude group: 'commons-logging'
+        //all*.exclude group: 'commons-beanutils', module: 'commons-beanutils'
+    }
+ 
+    // 显示当前项目下所有用于 compile 的 jar.
+    task listJars(description: 'Display all compile jars.') << {
+        configurations.compile.each { File file -> println file.name }
+    }
+ 
+    gradle.projectsEvaluated {
+        tasks.withType(JavaCompile) {
+            options.compilerArgs << "-Xlint:unchecked" << "-Xlint:deprecation"
+        }
+    }
+}

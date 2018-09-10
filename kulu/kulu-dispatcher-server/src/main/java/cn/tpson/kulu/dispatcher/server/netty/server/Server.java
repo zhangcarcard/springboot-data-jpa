@@ -2,10 +2,7 @@ package cn.tpson.kulu.dispatcher.server.netty.server;
 
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.buffer.PooledByteBufAllocator;
-import io.netty.channel.Channel;
-import io.netty.channel.ChannelInitializer;
-import io.netty.channel.ChannelOption;
-import io.netty.channel.EventLoopGroup;
+import io.netty.channel.*;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 
@@ -32,6 +29,7 @@ public class Server {
                 .channel(NioServerSocketChannel.class)
                 .option(ChannelOption.SO_BACKLOG, config.getBacklog())
                 .option(ChannelOption.CONNECT_TIMEOUT_MILLIS, config.getTimeout())
+                .option(ChannelOption.SO_REUSEADDR, true)
                 //注意是childOption
                 .childOption(ChannelOption.SO_KEEPALIVE, true)
                 .childOption(ChannelOption.TCP_NODELAY, true)

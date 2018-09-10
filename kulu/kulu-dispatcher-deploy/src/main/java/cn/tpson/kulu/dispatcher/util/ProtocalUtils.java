@@ -52,9 +52,9 @@ public class ProtocalUtils {
         byte[] ef = parse(endFlag);
 
         ByteArray array = ByteArray.asByteArray(msg);
-        if (!array.startsWith(sf) || !array.endsWith(ef)) {
+        /*if (!array.startsWith(sf) || !array.endsWith(ef)) {
             return null;
-        }
+        }*/
 
         byte[] token = array.subBytes(offset, count + offset).asBytes();
         String key = DatatypeConverter.printHexBinary(token);
@@ -74,9 +74,9 @@ public class ProtocalUtils {
         byte[] ef = parse(endFlag);
 
         ByteArray array = ByteArray.asByteArray(msg);
-        if (!array.startsWith(sf) || array.endsWith(ef)) {
+        /*if (!array.startsWith(sf) || !array.endsWith(ef)) {
             return null;
-        }
+        }*/
 
         List<ByteArray> list = array.split(split.getBytes());
         return  list.size() < count ? null : new String(list.get(count - 1).asBytes());
@@ -105,7 +105,7 @@ public class ProtocalUtils {
             return false;
         if (msg == null || msg.length <= startFlag.length + endFlag.length)
             return false;
-        if (offset != null && msg.length < offset)
+        if (offset != null && msg.length <= offset + count)
             return false;
 
         return true;

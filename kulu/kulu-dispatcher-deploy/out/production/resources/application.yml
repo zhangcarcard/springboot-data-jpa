@@ -3,7 +3,7 @@ logging:
   file:
     max-size: 50MB
   level:
-    root: info
+    cn.tpson.*: info
 server:
   port: 8081
 #  servlet:

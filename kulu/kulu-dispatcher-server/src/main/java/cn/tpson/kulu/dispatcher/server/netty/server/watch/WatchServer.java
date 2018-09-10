@@ -6,6 +6,7 @@ import cn.tpson.kulu.dispatcher.server.netty.server.Server;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
+import io.netty.handler.codec.bytes.ByteArrayEncoder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -38,7 +39,7 @@ public class WatchServer extends Server {
             protected void initChannel(SocketChannel socketChannel) {
                 socketChannel.pipeline()
 //                        .addLast("decoder", new WatchDecoder())
-//                        .addLast("encoder", new KuluWatchEncoder())
+//                        .addLast("encoder", new ByteArrayEncoder())
                         .addLast(watchServerHandler);
             }
         });

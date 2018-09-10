@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 @ChannelHandler.Sharable
 public class WatchServerHandler extends ServerHandler {
     @Override
-    public String decode(String key) {
+    public String decodeKey(String key) {
         return key;
     }
 }

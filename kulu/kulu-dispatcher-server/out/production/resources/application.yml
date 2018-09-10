@@ -2,8 +2,6 @@ logging:
   path: ${user.home}/logs/dispatcher
   file:
     max-size: 50MB
-  level:
-    root: info
 
 spring:
   profiles:

@@ -21,29 +21,8 @@ public class ByteArray {
         return asByteArray(str.getBytes());
     }
 
-    public static byte[] subBytes(byte[] src, int begin, int end) {
-        int length = end - begin;
-        byte[] dest = new byte[length];
-        System.arraycopy(src, begin, dest, 0, length);
-        return dest;
-    }
-
-    public int indexOf(byte[] src, int begin) {
-        if (src == null || src.length <= 0 || begin < 0 || begin >= value.length)
-            return -1;
-
-        int index = 0;
-        for (int i = begin; i < value.length; i++) {
-            if (value[i] == src[index++]) {
-                if (src.length == index) {
-                    return i - src.length + 1;
-                }
-            } else {
-                index = 0;
-            }
-        }
-
-        return -1;
+    public int indexOf(byte[] target, int begin) {
+        return indexOf(value, 0, value.length, target, 0, target.length, begin);
     }
 
     public int indexOf(byte[] src) {
@@ -60,15 +39,71 @@ public class ByteArray {
         return indexOf(src, 0);
     }
 
+    /**
+     * Code shared by String and StringBuffer to do searches. The
+     * source is the character array being searched, and the target
+     * is the string being searched for.
+     *
+     * @param   source       the characters being searched.
+     * @param   sourceOffset offset of the source string.
+     * @param   sourceCount  count of the source string.
+     * @param   target       the characters being searched for.
+     * @param   targetOffset offset of the target string.
+     * @param   targetCount  count of the target string.
+     * @param   fromIndex    the index to begin searching from.
+     */
+    static int indexOf(byte[] source, int sourceOffset, int sourceCount,
+                       byte[] target, int targetOffset, int targetCount,
+                       int fromIndex) {
+        if (fromIndex >= sourceCount) {
+            return (targetCount == 0 ? sourceCount : -1);
+        }
+        if (fromIndex < 0) {
+            fromIndex = 0;
+        }
+        if (targetCount == 0) {
+            return fromIndex;
+        }
+
+        byte first = target[targetOffset];
+        int max = sourceOffset + (sourceCount - targetCount);
+
+        for (int i = sourceOffset + fromIndex; i <= max; i++) {
+            /* Look for first byte. */
+            if (source[i] != first) {
+                while (++i <= max && source[i] != first);
+            }
+
+            /* Found first byte, now look at the rest of v2 */
+            if (i <= max) {
+                int j = i + 1;
+                int end = j + targetCount - 1;
+                for (int k = targetOffset + 1; j < end && source[j]
+                        == target[k]; j++, k++);
+
+                if (j == end) {
+                    /* Found whole array. */
+                    return i - sourceOffset;
+                }
+            }
+        }
+        return -1;
+    }
+
     public ByteArray subBytes(int begin) {
         return subBytes(begin, value.length);
     }
 
-    public ByteArray subBytes(int begin, int end) {
-        int length = end - begin;
+    public ByteArray subBytes(int begin, int length) {
         byte[] dest = new byte[length];
         System.arraycopy(value, begin, dest, 0, length);
         return new ByteArray(dest);
+    }
+
+    public static byte[] subBytes(byte[] src, int begin, int length) {
+        byte[] dest = new byte[length];
+        System.arraycopy(src, begin, dest, 0, length);
+        return dest;
     }
 
     public byte[] asBytes() {

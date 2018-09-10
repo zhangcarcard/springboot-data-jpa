@@ -18,7 +18,6 @@ public class KafkaConfiguration {
 
     @Bean
     public Producer producer() {
-        System.out.println(kafkaServers);
         Properties props = new Properties();
         props.put("bootstrap.servers", kafkaServers);
         props.put("acks", "all");

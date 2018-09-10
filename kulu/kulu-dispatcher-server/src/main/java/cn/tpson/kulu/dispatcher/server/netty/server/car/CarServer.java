@@ -7,6 +7,7 @@ import cn.tpson.kulu.dispatcher.server.netty.server.ServerConfig;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
+import io.netty.handler.codec.bytes.ByteArrayEncoder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -38,8 +39,8 @@ public class CarServer extends Server {
             @Override
             protected void initChannel(SocketChannel socketChannel) {
                 socketChannel.pipeline()
-                        .addLast("decoder", new CarDecoder())
-                        .addLast("encoder", new CarEncoder())
+//                        .addLast("decoder", new CarDecoder())
+//                        .addLast("encoder", new ByteArrayEncoder())
                         .addLast(carServerHandler);
             }
         });

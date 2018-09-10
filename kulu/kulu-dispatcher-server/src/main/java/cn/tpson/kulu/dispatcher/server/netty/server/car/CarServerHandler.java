@@ -12,7 +12,7 @@ import javax.xml.bind.DatatypeConverter;
 @ChannelHandler.Sharable
 public class CarServerHandler extends ServerHandler {
     @Override
-    public String decode(String hexToken) {
+    public String decodeKey(String hexToken) {
         return StringUtils.isBlank(hexToken)
                 ? ConvertUtils.bcd2Str(DatatypeConverter.parseHexBinary(hexToken))
                 : hexToken;
