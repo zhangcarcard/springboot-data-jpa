@@ -90,19 +90,48 @@ public class ByteArray {
         return -1;
     }
 
-    public ByteArray subBytes(int begin) {
-        return subBytes(begin, value.length);
+    public ByteArray subBytes(int beginIndex) {
+        if (beginIndex < 0) {
+            throw new StringIndexOutOfBoundsException(beginIndex);
+        }
+        int subLen = value.length - beginIndex;
+        if (subLen < 0) {
+            throw new StringIndexOutOfBoundsException(subLen);
+        }
+        return (beginIndex == 0) ? this : subBytes(beginIndex, subLen);
     }
 
-    public ByteArray subBytes(int begin, int length) {
-        byte[] dest = new byte[length];
-        System.arraycopy(value, begin, dest, 0, length);
-        return new ByteArray(dest);
+    public ByteArray subBytes(int beginIndex, int length) {
+        if (beginIndex < 0) {
+            throw new StringIndexOutOfBoundsException(beginIndex);
+        }
+        if (length > value.length) {
+            throw new StringIndexOutOfBoundsException(length);
+        }
+        int subLen = length;
+        if (subLen < 0) {
+            throw new StringIndexOutOfBoundsException(subLen);
+        }
+
+        if ((beginIndex == 0) && (subLen == value.length)) {
+            return this;
+        } else {
+            byte[] dest = new byte[length];
+            System.arraycopy(value, beginIndex, dest, 0, subLen);
+            return new ByteArray(dest);
+        }
     }
 
-    public static byte[] subBytes(byte[] src, int begin, int length) {
+    public static byte[] subBytes(byte[] src, int beginIndex, int length) {
+        if (beginIndex < 0) {
+            throw new StringIndexOutOfBoundsException(beginIndex);
+        }
+        if (length > src.length) {
+            throw new StringIndexOutOfBoundsException(length);
+        }
+
         byte[] dest = new byte[length];
-        System.arraycopy(src, begin, dest, 0, length);
+        System.arraycopy(src, beginIndex, dest, 0, length);
         return dest;
     }
 

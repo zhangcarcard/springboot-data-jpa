@@ -1,6 +1,7 @@
 package cn.tpson.kulu.dispatcher.controller;
 
 import cn.tpson.kulu.common.constant.ErrorCodeEnum;
+import cn.tpson.kulu.common.ds.ByteArray;
 import cn.tpson.kulu.common.dto.vo.ResultVO;
 import cn.tpson.kulu.common.dto.vo.TableVO;
 import cn.tpson.kulu.common.logger.Logger;
@@ -91,12 +92,12 @@ public class ProtocalController {
                 }
             }
 
-            if (protocal.getPort() != null) {
+            /*if (protocal.getPort() != null) {
                 ProtocalDTO p = protocalService.findByPort(protocal.getPort());
                 if (p != null) {
                     return ResultVO.failResult("端口【" + p.getPort() + "】下已存在协议【" + p.getName() + "】");
                 }
-            }
+            }*/
         }
 
 
@@ -140,8 +141,20 @@ public class ProtocalController {
             return ResultVO.failResult(ErrorCodeEnum.RESULT_NOT_FOUND);
         }
 
+        log.info("protocals.size:{}", protocals.size());
         byte[] msg = DatatypeConverter.parseHexBinary(hexMsg);
-        String key = ProtocalUtils.getKey(protocals.get(0), msg);
+        String key = null;
+        if (protocals.size() == 1) {
+            key = ProtocalUtils.getKey(protocals.get(0), msg);
+        } else {
+            ByteArray byteArray = ByteArray.asByteArray(msg);
+            for (ProtocalDTO p : protocals) {
+                if (byteArray.startsWith(p.getStartFlag().getBytes())) {
+                    key = ProtocalUtils.getKey(p, msg);
+                    break;
+                }
+            }
+        }
 
         log.info("key.key:{}", key);
         return StringUtils.isBlank(key)

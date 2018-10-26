@@ -14,20 +14,19 @@ public class C {
     public static void main(String[] args) throws Exception {
         SocketChannel sc = SocketChannel.open(new InetSocketAddress("localhost", 7788));
         ByteBuffer buffer = ByteBuffer.allocate(256);
-        buffer.put("IWAP00123456789#IW".getBytes());
-        buffer.flip();
-        sc.write(buffer);
-//        Thread.sleep(1000);
-        System.out.println("-------------------------");
-        buffer.clear();
-        buffer.put("AP01ZHANGKA#".getBytes());
+        buffer.put("IWAP00353456789012345#".getBytes());
         buffer.flip();
         sc.write(buffer);
         System.out.println("-------------------------");
         buffer.clear();
+        buffer.put("IWAP10180918V0000.0000N00000.0000E000.1201000323.8710000009700000,460,0,22457,13889,01,zh-cn,00,a|d8-15-0d-09-51-58|85&a|70-65-82-5b-32-40|93&a|70-65-82-5b-32-41|93#".getBytes());
+        buffer.flip();
+        sc.write(buffer);
+        System.out.println("-------------------------");
+        /*buffer.clear();
         buffer.put("IWAP01ZHANGKA#".getBytes());
         buffer.flip();
-        sc.write(buffer);
+        sc.write(buffer);*/
         sc.close();
         Thread.sleep(600000);
         /*byte a = '\r';

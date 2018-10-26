@@ -1,7 +1,8 @@
 package cn.tpson.kulu.dispatcher.util;
 
 import cn.tpson.kulu.common.ds.ByteArray;
-import cn.tpson.kulu.common.util.ConvertUtils;
+import cn.tpson.kulu.common.logger.Logger;
+import cn.tpson.kulu.common.logger.LoggerFactory;
 import cn.tpson.kulu.dispatcher.biz.dto.ProtocalDTO;
 import org.apache.commons.lang3.StringUtils;
 
@@ -13,6 +14,7 @@ import java.util.List;
  * Created by Zhangka in 2018/08/06
  */
 public class ProtocalUtils {
+    private static final Logger log = LoggerFactory.getLogger(ProtocalUtils.class);
     public static final String OFFSET_TYPE_OFFSET = "偏移量";
     public static final String OFFSET_TYPE_SPLIT = "分隔符";
 
@@ -44,20 +46,21 @@ public class ProtocalUtils {
             return null;
         }
 
-        String startFlag = protocal.getStartFlag();
-        String endFlag = protocal.getEndFlag();
+//        String startFlag = protocal.getStartFlag();
+//        String endFlag = protocal.getEndFlag();
         Integer offset = protocal.getOffset();
         Integer count = protocal.getCount();
-        byte[] sf = parse(startFlag);
-        byte[] ef = parse(endFlag);
+//        byte[] sf = parse(startFlag);
+//        byte[] ef = parse(endFlag);
 
         ByteArray array = ByteArray.asByteArray(msg);
         /*if (!array.startsWith(sf) || !array.endsWith(ef)) {
             return null;
         }*/
 
-        byte[] token = array.subBytes(offset, count + offset).asBytes();
+        byte[] token = array.subBytes(offset, count).asBytes();
         String key = DatatypeConverter.printHexBinary(token);
+        log.info("protocol:{},key:{}", protocal.getStartFlag(), key);
         return key;
     }
 
@@ -66,12 +69,12 @@ public class ProtocalUtils {
             return null;
         }
 
-        String startFlag = protocal.getStartFlag();
-        String endFlag = protocal.getEndFlag();
+//        String startFlag = protocal.getStartFlag();
+//        String endFlag = protocal.getEndFlag();
         String split = protocal.getSplit();
         Integer count = protocal.getCount();
-        byte[] sf = parse(startFlag);
-        byte[] ef = parse(endFlag);
+//        byte[] sf = parse(startFlag);
+//        byte[] ef = parse(endFlag);
 
         ByteArray array = ByteArray.asByteArray(msg);
         /*if (!array.startsWith(sf) || !array.endsWith(ef)) {
@@ -79,7 +82,9 @@ public class ProtocalUtils {
         }*/
 
         List<ByteArray> list = array.split(split.getBytes());
-        return  list.size() < count ? null : new String(list.get(count - 1).asBytes());
+        String key = list.size() < count ? null : new String(list.get(count - 1).asBytes());
+        log.info("protocol:{},key:{}", protocal.getStartFlag(), DatatypeConverter.printHexBinary(key.getBytes()));
+        return key;
     }
 
 

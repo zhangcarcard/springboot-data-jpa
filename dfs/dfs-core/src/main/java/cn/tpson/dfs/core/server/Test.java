@@ -2,7 +2,16 @@ package cn.tpson.dfs.core.server;
 
 import cn.tpson.dfs.common.util.Environment;
 
+import javax.xml.bind.DatatypeConverter;
 import java.io.*;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
+import java.net.URL;
+import java.nio.ByteBuffer;
+import java.nio.channels.AsynchronousFileChannel;
+import java.nio.channels.FileChannel;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Logger;
 
 /**
@@ -10,6 +19,9 @@ import java.util.logging.Logger;
  */
 public class Test {
     public static void main(String[] args) throws IOException {
+        ArrayList<String> list = new ArrayList<>();
+        Type type = ((ParameterizedType)list.getClass().getGenericSuperclass()).getActualTypeArguments()[0];
+        System.out.println(type);
         /*Message message = new Message();
         message.setMessageId(456L);
         message.setFilename("abc.txt");
@@ -135,5 +147,39 @@ public class Test {
         snappy.finish();
         snappy.flush();
         snappy.close();*/
+
+        /*
+        Writer fw = new OutputStreamWriter(new FileOutputStream("f:/char.txt"));
+        fw.write("杭州");
+        fw.close();
+
+        FileOutputStream fout = new FileOutputStream("f:/byte.txt");
+        fout.write("杭州".getBytes());
+        fout.close();*/
+
+        /*FileChannel fc = new FileOutputStream(new File("f:/a.tmp")).getChannel();
+        fc.position(2 * 1024 * 1024 * 1024L - 1);
+        fc.write(ByteBuffer.allocate(1));
+        fc.close();*/
+
+        //System.out.println((2 * 1024 * 1024 * 1024 -1));
+        //System.out.println(Integer.MAX_VALUE);
+
+        /*
+        RandomAccessFile r = null;
+        try {
+            try {
+                r = new RandomAccessFile(new File("f:/a.tmp"), "rw");
+                r.setLength(8 * 1024 * 1024 * 1024L);
+            } finally {
+                r.close();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        */
+
+//        System.out.println(DatatypeConverter.printHexBinary("IW".getBytes()));
+//        InputStream in = new URL("hdfs://192.168.1.251/user").openStream();
     }
 }

@@ -12,6 +12,7 @@ spring:
       idle-timeout: 10000
       maximum-pool-size: 10
       auto-commit: false
+      minimum-idle: 5
   jpa:
     show-sql: true
     hibernate:

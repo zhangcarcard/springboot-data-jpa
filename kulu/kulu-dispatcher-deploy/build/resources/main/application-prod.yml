@@ -10,8 +10,9 @@ spring:
     hikari:
       connection-timeout: 5000
       idle-timeout: 10000
-      maximum-pool-size: 200
+      maximum-pool-size: 50
       auto-commit: false
+      minimum-idle: 5
   jpa:
     show-sql: true
     hibernate:
